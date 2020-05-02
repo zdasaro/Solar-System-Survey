@@ -1,4 +1,4 @@
-import { Group, SphereGeometry, MeshBasicMaterial, Mesh, Vector3, Matrix3, LineBasicMaterial, BufferGeometry, Line, TextureLoader, NearestFilter } from 'three';
+import { Group, SphereGeometry, MeshBasicMaterial, Mesh, Vector3, Matrix3, LineBasicMaterial, BufferGeometry, Line, TextureLoader, NearestFilter, MeshPhongMaterial } from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { TWEEN } from 'three/examples/jsm/libs/tween.module.min.js';
 
@@ -16,7 +16,8 @@ class Body extends Group {
         } else if (parameters.id === "terra") {
             const texture = new TextureLoader().load('src/img/8k_earth_daymap.jpg');
             texture.minFilter = NearestFilter;
-            material = new MeshBasicMaterial({
+            // material = new MeshBasicMaterial({
+            material = new MeshPhongMaterial({
                 map: texture
             });
         }
@@ -36,6 +37,7 @@ class Body extends Group {
         this.o = degToRad(parameters.o); // longitude of ascending node
         this.w = degToRad(parameters.w); // argument of perihelion
         this.m = degToRad(parameters.m); // mean anomaly at J2000
+        this.bodyid = parameters.id; // body name
 
         // Calculate Equatorial Position Vector 
         this.eqPosition = function(daysSinceJ2000) {

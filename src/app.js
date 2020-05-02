@@ -34,6 +34,7 @@ controls.enablePan = false;
 controls.minDistance = 1;
 controls.maxDistance = 500;
 controls.update();
+scene.addControls(controls);
 
 // Render loop
 const onAnimationFrameHandler = (timeStamp) => {

@@ -1,5 +1,5 @@
 import * as Dat from 'dat.gui';
-import { Scene, Color, CubeTextureLoader } from 'three';
+import { Scene, Color, CubeTextureLoader, Vector3 } from 'three';
 import { Body, Land, Starfield, Sun } from 'objects';
 import { BasicLights } from 'lights';
 import {Bodies} from '.';
@@ -15,6 +15,7 @@ class SeedScene extends Scene {
             MStoSimulationDays: 10,
             pause: false,
             showOrbitLines: false,
+            followEarth: false,
             updateList: [],
         };
 
@@ -61,6 +62,11 @@ class SeedScene extends Scene {
         this.state.gui.add(this.state, 'MStoSimulationDays', 10, 1000);
         this.state.gui.add(this.state, 'pause');
         this.state.gui.add(this.state, 'showOrbitLines');
+        this.state.gui.add(this.state, 'followEarth');
+    }
+
+    addControls(ctrl) {
+        this.controls = ctrl;
     }
 
     addToUpdateList(object) {
@@ -68,7 +74,7 @@ class SeedScene extends Scene {
     }
 
     update(timeStamp) {
-        const { MStoSimulationDays, pause, updateList, showOrbitLines } = this.state;
+        const { MStoSimulationDays, pause, updateList, showOrbitLines, followEarth } = this.state;
         if (showOrbitLines && !this.prevOrbitLineToggle) {
             for (const obj of updateList) {
                 obj.toggleOrbitPathLine(showOrbitLines);
@@ -80,6 +86,21 @@ class SeedScene extends Scene {
             }
         }
         this.prevOrbitLineToggle = showOrbitLines;
+
+        // camera
+        if (followEarth && !this.prevFollowEarth) {
+            for (const p of updateList) {
+                if (p.bodyid === "terra") {
+                    const earthPos = p.position;
+                    if (this.controls) this.controls.target = earthPos;
+                    this.prevFollowEarth = true;
+                    break;
+                }
+            }
+        } else if (!followEarth && this.prevFollowEarth) {
+            this.controls.target = new Vector3(0, 0, 0);
+            this.prevFollowEarth = false;
+        }
 
         if (!pause) {
             if (this.prevTimestamp == -1) {
