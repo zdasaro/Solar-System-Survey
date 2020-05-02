@@ -2,18 +2,19 @@
   "name": "lower-case-dashed-name-of-project",
   "repository": "REPOSITORY-NAME-AS-IT-APPEARS-IN-GITHUB-URL",
   "version": "0.1.0",
-  "title": "PROJECT TITLE HERE",
-  "description": "SHORT DESCRIPTION OF PROJECT HERE. ONE TO TWO SENTENCES MAX",
+  "title": "Solar System Survey",
+  "description": "Graphical simulation of the solar system",
   "keywords": [
     "Princeton",
     "graphics",
     "three.js",
     "COS 426",
     "ivy league",
-    "keyword1",
-    "keyword2",
-    "...",
-    "this last entry CANNOT have a comma after it ->"
+    "planets",
+    "solar",
+    "astronomy",
+    "space",
+    "sky"
   ],
   "scripts": {
     "start": "webpack-dev-server --mode development --output-public-path \"\"",

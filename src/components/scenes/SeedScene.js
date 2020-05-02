@@ -1,6 +1,6 @@
 import * as Dat from 'dat.gui';
 import { Scene, Color } from 'three';
-import { Body, Land } from 'objects';
+import { Body, Land, Starfield } from 'objects';
 import { BasicLights } from 'lights';
 
 // Tried loading from the JSON file, but was having trouble, so I'm hard coding it here for now
@@ -137,6 +137,7 @@ class SeedScene extends Scene {
 
         // Add meshes to scene
         const land = new Land();
+        const starfield = new Starfield();
         //const flower = new Flower(this);
         for (let i = 0; i < BODIES.length; i++) {
             if (BODIES[i].parent == -1) {
@@ -145,8 +146,10 @@ class SeedScene extends Scene {
             }
         }
 
+        
+
         const lights = new BasicLights();
-        this.add(land, lights);
+        this.add(land, lights, starfield);
 
         // Populate GUI
         this.state.gui.add(this.state, 'MStoSimulationDays', 10, 1000);
