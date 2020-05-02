@@ -1,21 +1,24 @@
-import { Group, SphereGeometry, MeshBasicMaterial, Mesh, Vector3, Matrix3 } from 'three';
+import { Group, SphereGeometry, MeshBasicMaterial, Mesh, Vector3, Matrix3, LineBasicMaterial, BufferGeometry, Line } from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { TWEEN } from 'three/examples/jsm/libs/tween.module.min.js';
 
 class Body extends Group {
     
-    constructor(parent, parameters) {
+    constructor(scene, parent, parameters) {
         // Call parent Group() constructor
         super();
 
         let radius = 0.25 // temporary parameter
         const geometry = new SphereGeometry(radius,32,32);
-        const material = new MeshBasicMaterial({color: 0xffff00});
+        let material = new MeshBasicMaterial({color: 0xffff00});
+        if (parameters.id === "terra_moon") {
+            material = new MeshBasicMaterial({color: 0xff0000});
+        }
         const sphere = new Mesh(geometry, material);
         this.add(sphere);
 
-        // Add self to parent's update list
-        parent.addToUpdateList(this);
+        // Add self to scene's update list
+        scene.addToUpdateList(this);
 
         function degToRad(angle) {
             return angle * Math.PI / 180;
@@ -66,17 +69,31 @@ class Body extends Group {
             m1.multiply(m2).multiply(m3);
             posVector.applyMatrix3(m1);
 
-            return posVector;
+            return new Vector3(posVector.x, posVector.z, posVector.y);
         }
 
         this.auToWorldUnits = 10; // 1 AU is how many world units
         this.lengthTimeSlice = 0.1; // in days
         this.orbitPositions = [] // Orbit positions for each day
 
-        this.orbitalPeriod = Math.sqrt(Math.pow(this.a, 3)) * 365.25; // in days
+        this.orbitalPeriod = Math.sqrt(Math.pow(this.a, 3) / parameters.parentMass) * 365.25; // in days
         let numTimeSlices = Math.floor(this.orbitalPeriod / this.lengthTimeSlice);
         for (let i = 0; i < numTimeSlices; i++) {
             this.orbitPositions.push(this.eqPosition(i * this.lengthTimeSlice).multiplyScalar(this.auToWorldUnits))
+        }
+
+        let orbitPathLineMaterial = new LineBasicMaterial({color: 0xffffff});
+        let orbitPathLineGeo = new BufferGeometry().setFromPoints(this.orbitPositions);
+        this.orbitPathLine = new Line(orbitPathLineGeo, orbitPathLineMaterial);
+        this.parent = parent;
+    }
+
+    toggleOrbitPathLine(showOrbitPathLines) {
+        if (showOrbitPathLines) {
+            this.parent.add(this.orbitPathLine);
+        }
+        else {
+            this.parent.remove(this.orbitPathLine);
         }
     }
 
@@ -95,8 +112,8 @@ class Body extends Group {
     update(timeStamp) {
         let posVector = this.getOrbitPosition(2451545 + timeStamp)
         this.position.x = posVector.x;
-        this.position.y = posVector.z;
-        this.position.z = posVector.y;
+        this.position.y = posVector.y;
+        this.position.z = posVector.z;
     }
 }
 
