@@ -118,7 +118,7 @@ class Body extends Group {
     }
 
     update(timeStamp) {
-        let posVector = this.getOrbitPosition(2451545 + timeStamp)
+        let posVector = this.getOrbitPosition(timeStamp)
         this.position.x = posVector.x;
         this.position.y = posVector.y;
         this.position.z = posVector.z;
