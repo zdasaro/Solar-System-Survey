@@ -4,16 +4,16 @@ class Bodies extends Object {
 
         this.bodyList = [
             {
-                "id": "mercury",
-                "parent": -1,
-                "parentMass": 1,
-                "radius": 2439.7,
-                "a": 0.387098,
-                "e": 0.205630,
-                "i": 7.005,
-                "o": 48.331,
-                "w": 29.124,
-                "m": 174.796
+                "id": "mercury", // name
+                "parent": -1, // ID (index in this list) of parent. -1 for sun
+                "parentMass": 1, // mass of parent object in solar masses (technically should be sum of parent and object mass)
+                "radius": 2439.7, // in km
+                "a": 0.387098, // sem-major axis in AU
+                "e": 0.205630, // eccentricity
+                "i": 7.005, // inclination in degrees with respect to ecliptic
+                "o": 48.331, // longitude of ascending node in degrees 
+                "w": 29.124, // argument of perihelion in degrees
+                "m": 174.796 // mean anomoly at Jan 1, 2000, 12:00 UTC (J2000)
             },
             {
                 "id": "venus",
