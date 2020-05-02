@@ -141,7 +141,9 @@ class SeedScene extends Scene {
             let monthNumber = this.monthArray.indexOf(this.modMonth) + 1;
             // Sets time to UTC 12:00 of this day
             this.simulationTime = 367 * this.modYear - Math.floor(7 * (this.modYear + Math.floor((monthNumber + 9) / 12.0)) / 4) + Math.floor(275 * monthNumber / 9) + this.modDay + 1721014;
+            return true;
         }
+        return false;
     }
 
     update(timeStamp) {
@@ -173,8 +175,7 @@ class SeedScene extends Scene {
             this.prevFollowEarth = false;
         }
 
-        this.dateToJD(); // Update time from GUI input if necessary
-        if (!pause) {
+        if (!pause || this.dateToJD()) {
             this.JDtoDate(this.simulationTime);
             if (this.prevTimestamp == -1) {
                 this.simulationTime = 2451545 + timeStamp * (SimulationDaystoSecond / 1000.0);
