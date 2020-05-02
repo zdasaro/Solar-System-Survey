@@ -77,7 +77,7 @@ class Body extends Group {
             m1.multiply(m2).multiply(m3);
             posVector.applyMatrix3(m1);
 
-            return new Vector3(posVector.x, posVector.z, posVector.y);
+            return new Vector3(posVector.y, posVector.z, posVector.x);
         }
 
         this.auToWorldUnits = 10; // 1 AU is how many world units
