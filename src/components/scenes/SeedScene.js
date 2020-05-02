@@ -1,6 +1,6 @@
 import * as Dat from 'dat.gui';
-import { Scene, Color } from 'three';
-import { Body, Land, Starfield } from 'objects';
+import { Scene, Color, CubeTextureLoader } from 'three';
+import { Body, Land, Starfield, Sun } from 'objects';
 import { BasicLights } from 'lights';
 import {Bodies} from '.';
 
@@ -23,12 +23,21 @@ class SeedScene extends Scene {
 
         // Set background to a nice color
         this.background = new Color(0x000000);
+        
+        // this.background = new CubeTextureLoader().setPath('src/img/star_cubemap/')
+        // .load([
+        //     'px.png', 'nx.png',
+        //     'py.png', 'ny.png',
+        //     'pz.png', 'nz.png'
+        // ]);
         this.prevOrbitLineToggle = false;
         this.prevTimestamp = -1;
         this.simulationTime = -1;
 
         // Add meshes to scene
-        const land = new Land();
+        // const land = new Land();
+        // sun
+        const sun = new Sun();
         const starfield = new Starfield();
         //const flower = new Flower(this);
         for (let i = 0; i < BODIES.length; i++) {
@@ -46,7 +55,7 @@ class SeedScene extends Scene {
         
 
         const lights = new BasicLights();
-        this.add(land, lights, starfield);
+        this.add(sun, lights, starfield);
 
         // Populate GUI
         this.state.gui.add(this.state, 'MStoSimulationDays', 10, 1000);

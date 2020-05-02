@@ -1,4 +1,4 @@
-import { Group, SphereGeometry, MeshBasicMaterial, Mesh, Vector3, Matrix3, LineBasicMaterial, BufferGeometry, Line } from 'three';
+import { Group, SphereGeometry, MeshBasicMaterial, Mesh, Vector3, Matrix3, LineBasicMaterial, BufferGeometry, Line, TextureLoader, NearestFilter } from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { TWEEN } from 'three/examples/jsm/libs/tween.module.min.js';
 
@@ -13,6 +13,12 @@ class Body extends Group {
         let material = new MeshBasicMaterial({color: 0xffff00});
         if (parameters.id === "terra_moon") {
             material = new MeshBasicMaterial({color: 0xff0000});
+        } else if (parameters.id === "terra") {
+            const texture = new TextureLoader().load('src/img/8k_earth_daymap.jpg');
+            texture.minFilter = NearestFilter;
+            material = new MeshBasicMaterial({
+                map: texture
+            });
         }
         const sphere = new Mesh(geometry, material);
         this.add(sphere);
