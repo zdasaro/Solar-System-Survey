@@ -14,28 +14,63 @@ class Body extends Group {
             radius = 0.005
         }
 
-        this.minZoom = radius + 0.1;
+        // this.minZoom = radius + 0.1;
+        this.minZoom = radius * 1.3;
         this.maxZoom = parameters.a * 10;
         const geometry = new SphereGeometry(radius,32,32);
         let material = new MeshBasicMaterial({color: 0xffff00});
-        if (parameters.id === "terra_moon") {
-            material = new MeshBasicMaterial({color: 0xff0000});
-        } else if (parameters.id === "terra") {
-            // const texture = new TextureLoader().load('src/img/8k_earth_daymap.jpg');
-            const texture = new TextureLoader().load('src/img/earth/Earth.png');
-            const norm = new TextureLoader().load('src/img/earth/Earth-normal-8k.png');
-            const specMap = new TextureLoader().load('src/img/earth/EarthSpec.png');
-            texture.minFilter = NearestFilter;
-            norm.minFilter = NearestFilter;
-            // material = new MeshBasicMaterial({
-            material = new MeshPhongMaterial({
-                map: texture,
-                normalMap: norm,
-                normalScale: new Vector2(5, 5),
-                specularMap: specMap,
-                specular: new Color(0x333333)
-            });
+        switch (parameters.id) {
+            case "terra_moon":
+                material = new MeshBasicMaterial({color: 0xff0000});
+                break;
+            case "terra":
+                material = this.createPhongMaterial('src/img/earth/Earth.png', 'src/img/earth/Earth-normal-8k.png',
+                'src/img/earth/EarthSpec.png', {
+                    normalScale: new Vector2(3, 3),
+                    specular: new Color(0x262626)
+                });
+                break;
+            case "mercury":
+                material = this.createPhongMaterial('src/img/mercury.jpg', undefined, undefined, {
+                    shininess: 10
+                });
+                break;
+            case "venus":
+                material = this.createPhongMaterial('src/img/venus/4k_venus_atmosphere.jpg', undefined, undefined, {
+                    shininess: 5
+                });
+                break;
+            case "mars":
+                material = this.createPhongMaterial('src/img/mars/Mars_4k.png', 'src/img/mars/MarsNormal.png', undefined, {
+                    normalScale: new Vector2(1.5, 1.5),
+                    shininess: 5,
+                    specular: new Color(0x262626)
+                });
+                break;
+            case "jupiter":
+                material = this.createPhongMaterial('src/img/jupiter/Jupiter.png', undefined, undefined, {
+                    shininess: 10
+                });
+                break;
+            case "saturn":
+                material = this.createPhongMaterial('src/img/saturn/8k_saturn.jpg', undefined, undefined, {
+                    shininess: 2,
+                    specular: new Color(0x060606)
+                });
+                break;
+            case "uranus":
+                material = this.createPhongMaterial('src/img/uranus/UranusJVV.png', undefined, undefined, {
+                    shininess: 4,
+                    specular: new Color(0x505050)
+                });
+                break;
+            case "neptune":
+                material = this.createPhongMaterial('src/img/neptune/neptune2k.jpg', undefined, undefined, {
+                    shininess: 10
+                });
+                break;
         }
+        
         const sphere = new Mesh(geometry, material);
         this.add(sphere);
 
@@ -118,6 +153,22 @@ class Body extends Group {
         else {
             this.parent.remove(this.orbitPathLine);
         }
+    }
+
+    getTexture(file, minFilter) {
+        const texture = new TextureLoader().load(file);
+        if (minFilter !== undefined) texture.minFilter = minFilter;
+        return texture;
+    }
+
+    createPhongMaterial(mapFile, normalMapFile, specMapFile, phongProps) {
+        if (phongProps == undefined) phongProps = {};
+        const minFilter = NearestFilter;
+        phongProps.map = this.getTexture(mapFile, minFilter);
+        if (normalMapFile) phongProps.normalMap = this.getTexture(normalMapFile, minFilter);
+        if (specMapFile) phongProps.specularMap = this.getTexture(specMapFile, minFilter);
+        const material = new MeshPhongMaterial(phongProps);
+        return material;
     }
 
     getOrbitPosition(jd) {

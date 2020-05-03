@@ -1,0 +1,4 @@
+TychoSkymap.jpg: https://svs.gsfc.nasa.gov/3442
+All planets: http://www.celestiamotherlode.net/
+4k_venus_atmosphere.jpg: https://www.solarsystemscope.com/textures/
+8k_saturn.jpg https://www.solarsystemscope.com/textures/
