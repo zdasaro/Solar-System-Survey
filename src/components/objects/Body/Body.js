@@ -1,4 +1,4 @@
-import { Group, SphereGeometry, MeshBasicMaterial, Mesh, Vector3, Matrix3, LineBasicMaterial, BufferGeometry, Line, TextureLoader, NearestFilter, MeshPhongMaterial } from 'three';
+import { Group, SphereGeometry, MeshBasicMaterial, Mesh, Vector3, Matrix3, LineBasicMaterial, BufferGeometry, Line, TextureLoader, NearestFilter, MeshPhongMaterial, Vector2, Color } from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { TWEEN } from 'three/examples/jsm/libs/tween.module.min.js';
 
@@ -14,11 +14,19 @@ class Body extends Group {
         if (parameters.id === "terra_moon") {
             material = new MeshBasicMaterial({color: 0xff0000});
         } else if (parameters.id === "terra") {
-            const texture = new TextureLoader().load('src/img/8k_earth_daymap.jpg');
+            // const texture = new TextureLoader().load('src/img/8k_earth_daymap.jpg');
+            const texture = new TextureLoader().load('src/img/earth/Earth.png');
+            const norm = new TextureLoader().load('src/img/earth/Earth-normal-8k.png');
+            const specMap = new TextureLoader().load('src/img/earth/EarthSpec.png');
             texture.minFilter = NearestFilter;
+            norm.minFilter = NearestFilter;
             // material = new MeshBasicMaterial({
             material = new MeshPhongMaterial({
-                map: texture
+                map: texture,
+                normalMap: norm,
+                normalScale: new Vector2(5, 5),
+                specularMap: specMap,
+                specular: new Color(0x333333)
             });
         }
         const sphere = new Mesh(geometry, material);

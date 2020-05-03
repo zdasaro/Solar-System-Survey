@@ -15,7 +15,7 @@ class SeedScene extends Scene {
             SimulationDaystoSecond: 10,
             pause: false,
             showOrbitLines: false,
-            followEarth: false,
+            cameraFollow: 'Sun',
             updateList: [],
         };
 
@@ -40,6 +40,7 @@ class SeedScene extends Scene {
         this.month = 'Jan';
         this.day = 1;
         this.monthArray = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+        this.bodyArray = ['Sun', 'Mercury', 'Venus', 'Earth', 'Mars', 'Jupiter', 'Saturn', 'Uranus', 'Neptune'];
 
         // Time menu modification
         this.modYear = 2000;
@@ -80,7 +81,7 @@ class SeedScene extends Scene {
         modifyGUI.add(this.state, 'SimulationDaystoSecond', -100, 100);
         modifyGUI.add(this.state, 'pause');
         modifyGUI.add(this.state, 'showOrbitLines');
-        modifyGUI.add(this.state, 'followEarth');
+        modifyGUI.add(this.state, 'cameraFollow', this.bodyArray);
         modifyGUI.add(this, 'modYear');
         modifyGUI.add(this, 'modMonth', this.monthArray);
         modifyGUI.add(this, 'modDay');
@@ -147,7 +148,7 @@ class SeedScene extends Scene {
     }
 
     update(timeStamp) {
-        const { SimulationDaystoSecond, pause, updateList, showOrbitLines, followEarth } = this.state;
+        const { SimulationDaystoSecond, pause, updateList, showOrbitLines, cameraFollow } = this.state;
         if (showOrbitLines && !this.prevOrbitLineToggle) {
             for (const obj of updateList) {
                 obj.toggleOrbitPathLine(showOrbitLines);
@@ -161,18 +162,22 @@ class SeedScene extends Scene {
         this.prevOrbitLineToggle = showOrbitLines;
 
         // camera
-        if (followEarth && !this.prevFollowEarth) {
+        let bodyToFollow = 'sun';
+        switch (cameraFollow) {
+            case 'Earth':
+                bodyToFollow = 'terra';
+                break;
+            default:
+                bodyToFollow = cameraFollow.toLowerCase();
+        }
+        if (bodyToFollow === 'sun') this.controls.target = new Vector3(0, 0, 0);
+        else if (this.controls) {
             for (const p of updateList) {
-                if (p.bodyid === "terra") {
-                    const earthPos = p.position;
-                    if (this.controls) this.controls.target = earthPos;
-                    this.prevFollowEarth = true;
+                if (p.bodyid === bodyToFollow) {
+                    this.controls.target = p.position;
                     break;
                 }
             }
-        } else if (!followEarth && this.prevFollowEarth) {
-            this.controls.target = new Vector3(0, 0, 0);
-            this.prevFollowEarth = false;
         }
 
         if (!pause || this.dateToJD()) {
