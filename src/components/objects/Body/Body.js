@@ -13,6 +13,9 @@ class Body extends Group {
         if (radius < 0.005) {
             radius = 0.005
         }
+
+        this.minZoom = radius + 0.1;
+        this.maxZoom = parameters.a * 10;
         const geometry = new SphereGeometry(radius,32,32);
         let material = new MeshBasicMaterial({color: 0xffff00});
         if (parameters.id === "terra_moon") {

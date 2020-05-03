@@ -1,6 +1,6 @@
 import * as Dat from 'dat.gui';
 import { Scene, Color, CubeTextureLoader, Vector3 } from 'three';
-import { Body, Land, Starfield, Sun } from 'objects';
+import { Body, Starfield, Sun } from 'objects';
 import { BasicLights } from 'lights';
 import {Bodies} from '.';
 
@@ -9,13 +9,16 @@ class SeedScene extends Scene {
         // Call parent Scene() constructor
         super();
 
+        this.minZoom = 4;
+        this.maxZoom = 1000;
+
         // Init state
         this.state = {
             gui: new Dat.GUI(), // Create GUI for scene
             SimulationDaystoSecond: 10,
             pause: false,
             showOrbitLines: false,
-            cameraFollow: 'Sun',
+            changeFocus: "Sol",
             updateList: [],
         };
 
@@ -40,7 +43,6 @@ class SeedScene extends Scene {
         this.month = 'Jan';
         this.day = 1;
         this.monthArray = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-        this.bodyArray = ['Sun', 'Mercury', 'Venus', 'Earth', 'Mars', 'Jupiter', 'Saturn', 'Uranus', 'Neptune'];
 
         // Time menu modification
         this.modYear = 2000;
@@ -51,12 +53,14 @@ class SeedScene extends Scene {
         this.prevDay = 1;
 
         // Add meshes to scene
-        // const land = new Land();
+        this.bodyIDs = ["Sol"];
+        this.prevFocus = "Sol";
         // sun
         const sun = new Sun();
         const starfield = new Starfield();
         //const flower = new Flower(this);
         for (let i = 0; i < BODIES.length; i++) {
+            this.bodyIDs.push(BODIES[i].id);
             if (BODIES[i].parent == -1) {
                 const body = new Body(this, this, BODIES[i]);
                 this.add(body);
@@ -67,21 +71,16 @@ class SeedScene extends Scene {
                 parentObject.add(body);
             }
         }
-
         
-
         const lights = new BasicLights();
-        this.add(sun, lights, starfield);
-
-        // Populate GUI
-        
+        this.add(sun, lights, starfield);   
 
         // Populate GUI
         var modifyGUI = this.state.gui.addFolder('Modifiable Values');
         modifyGUI.add(this.state, 'SimulationDaystoSecond', -100, 100);
         modifyGUI.add(this.state, 'pause');
         modifyGUI.add(this.state, 'showOrbitLines');
-        modifyGUI.add(this.state, 'cameraFollow', this.bodyArray);
+        modifyGUI.add(this.state, 'changeFocus', this.bodyIDs);
         modifyGUI.add(this, 'modYear');
         modifyGUI.add(this, 'modMonth', this.monthArray);
         modifyGUI.add(this, 'modDay');
@@ -92,8 +91,9 @@ class SeedScene extends Scene {
         readOnlyGUI.add(this, 'day').listen();
     }
 
-    addControls(ctrl) {
-        this.controls = ctrl;
+    addCamera(camera) {
+        this.camera = camera;
+        this.add(camera);
     }
 
     addToUpdateList(object) {
@@ -148,7 +148,7 @@ class SeedScene extends Scene {
     }
 
     update(timeStamp) {
-        const { SimulationDaystoSecond, pause, updateList, showOrbitLines, cameraFollow } = this.state;
+        const { SimulationDaystoSecond, pause, updateList, showOrbitLines, changeFocus } = this.state;
         if (showOrbitLines && !this.prevOrbitLineToggle) {
             for (const obj of updateList) {
                 obj.toggleOrbitPathLine(showOrbitLines);
@@ -162,23 +162,27 @@ class SeedScene extends Scene {
         this.prevOrbitLineToggle = showOrbitLines;
 
         // camera
-        let bodyToFollow = 'sun';
-        switch (cameraFollow) {
-            case 'Earth':
-                bodyToFollow = 'terra';
-                break;
-            default:
-                bodyToFollow = cameraFollow.toLowerCase();
-        }
-        if (bodyToFollow === 'sun') this.controls.target = new Vector3(0, 0, 0);
-        else if (this.controls) {
-            for (const p of updateList) {
-                if (p.bodyid === bodyToFollow) {
-                    this.controls.target = p.position;
-                    break;
+        if (this.prevFocus != changeFocus) {
+            if (changeFocus === "Sol") {
+                window.focusObj.remove(this.camera);
+                window.focusObj = this;
+                this.add(this.camera);
+                this.camera.position.clampLength(this.minZoom, this.maxZoom);
+                this.prevFocus = changeFocus;
+            }
+            else {
+                for (const p of updateList) {
+                    if (p.bodyid === changeFocus) {
+                        window.focusObj.remove(this.camera);
+                        window.focusObj = p;
+                        p.add(this.camera);
+                        this.camera.position.clampLength(p.minZoom, p.maxZoom);
+                        this.prevFocus = changeFocus;
+                        break;
+                    }
                 }
             }
-        }
+        } 
 
         if (!pause || this.dateToJD()) {
             this.JDtoDate(this.simulationTime);
