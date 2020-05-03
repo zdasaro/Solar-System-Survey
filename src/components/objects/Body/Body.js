@@ -8,7 +8,11 @@ class Body extends Group {
         // Call parent Group() constructor
         super();
 
-        let radius = parameters.radius * 6.6846e-5 // temporary parameter
+        // Set the radius to be 600 times its real size. If the radius is less than 0.005 world units, set that as the floor
+        let radius = parameters.radius * 4e-6 // temporary parameter
+        if (radius < 0.005) {
+            radius = 0.005
+        }
         const geometry = new SphereGeometry(radius,32,32);
         let material = new MeshBasicMaterial({color: 0xffff00});
         if (parameters.id === "terra_moon") {
