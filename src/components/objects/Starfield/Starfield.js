@@ -4,7 +4,7 @@ class Starfield extends Group {
     constructor() {
         super();
 
-        const geometry = new SphereGeometry(500, 64, 64);
+        const geometry = new SphereGeometry(1000, 64, 64);
         const texture = new TextureLoader().load('src/img/galaxy_starfield.png');
         texture.minFilter = NearestFilter;
         // const texture = new CubeTextureLoader().setPath('src/img/star_cubemap/')

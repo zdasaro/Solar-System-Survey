@@ -4,7 +4,7 @@ class Starfield extends Group {
     constructor() {
         super();
 
-        const geometry = new SphereGeometry(1, 32, 32);
+        const geometry = new SphereGeometry(4e-6 * 696340, 32, 32); // Objects are scaled by 600 of their real size
         const texture = new TextureLoader().load('src/img/8k_earth_daymap.jpg');
         texture.minFilter = NearestFilter;
         const material = new MeshBasicMaterial({
