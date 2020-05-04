@@ -88,7 +88,7 @@ class SeedScene extends Scene {
         }
         
         const lights = new BasicLights();
-        this.add(sun, lights, starfield);   
+        this.add(/*sun, */lights, starfield);   
 
         // Populate GUI
         var modifyGUI = this.state.gui.addFolder('Modifiable Values');

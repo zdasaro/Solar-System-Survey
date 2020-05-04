@@ -19,10 +19,9 @@ class Body extends Group {
         const geometry = new SphereGeometry(radius,32,32);
         let material = new MeshBasicMaterial({color: 0xffff00});
         let addons = []; // additional geometries (rings or clouds) to add to the planet
+        this.isModel = false;
         switch (parameters.id) {
-            case "terra_moon":
-                material = new MeshBasicMaterial({color: 0xff0000});
-                break;
+            // planets
             case "terra":
                 material = this.createPhongMaterial('src/img/earth/Earth.png', 'src/img/earth/Earth-normal-8k.png',
                 'src/img/earth/EarthSpec.png', {
@@ -87,10 +86,146 @@ class Body extends Group {
                     shininess: 10
                 });
                 break;
+            // moons
+            case "terra_moon":
+                material = this.createPhongMaterial('src/img/earth/moon/moon-4k.png', 'src/img/earth/moon/moon_normal.jpg', undefined, {
+                    shininess: 4,
+                    specular: new Color(0x333333)
+                });
+                break;
+            case "callisto":
+                material = this.createPhongMaterial('src/img/jupiter/moons/Callisto.png', 'src/img/jupiter/moons/CallistoNormal.png', undefined, {
+                    shininess: 3,
+                    specular: new Color(0x898989), // Callisto is very bright
+                    normalScale: new Vector2(0.7, 0.7)
+                });
+                break;
+            case "europa":
+                material = this.createPhongMaterial('src/img/jupiter/moons/Europa.png', undefined, undefined, {
+                    shininess: 8,
+                    specular: new Color(0x211511) // red-orange tint
+                });
+                break;
+            case "ganymede":
+                material = this.createPhongMaterial('src/img/jupiter/moons/ganymede.jpg', undefined, undefined, {
+                    shininess: 5,
+                    specular: new Color(0x555555)
+                });
+                break;
+            case "io":
+                material = this.createPhongMaterial('src/img/jupiter/moons/Io.png', 'src/img/jupiter/moons/IoNormal.png', undefined, {
+                    specular: new Color(0x606022), // yellow tint
+                    shininess: 5
+                });
+                break;
+            // Mars moons
+            case "deimos":
+                this.loadModel('src/img/mars/moons/Deimos_1_1000.glb', radius, {
+                    // specular: new Color(0xB08060),
+                    // color: new Color(0xB08060)
+                });
+                break;
+            case "phobos":
+                this.loadModel('src/img/mars/moons/Phobos_1_1000.glb', radius, {
+                    // specular: new Color(0xB08060),
+                    // color: new Color(0x958575)
+                });
+                break;
+            // Saturn moons
+            case "dione":
+                material = this.createPhongMaterial('src/img/saturn/moons/Dione.jpg', undefined, undefined, {
+                    shininess: 5,
+                    specular: new Color(0x555555)
+                });
+                break;
+            case "enceladus":
+                material = this.createPhongMaterial('src/img/saturn/moons/Enceladus.png', undefined, undefined, {
+                    shininess: 5,
+                    specular: new Color(0x555555)
+                });
+                break;
+            case "hyperion":
+                this.loadModel('src/img/saturn/moons/Hyperion_1_1000.glb', radius);
+                break;
+            case "iapetus":
+                material = this.createPhongMaterial('src/img/saturn/moons/iapetus4kalb.jpg', undefined, undefined, {
+                    shininess: 3,
+                    specular: new Color(0x555555)
+                });
+                break;
+            case "mimas":
+                material = this.createPhongMaterial('src/img/saturn/moons/mimas2kalb.jpg', undefined, undefined, {
+                    shininess: 3,
+                    specular: new Color(0x777777)
+                });
+                break;
+            case "phoebe":
+                material = this.createPhongMaterial('src/img/saturn/moons/JVV_Phoebe.png', undefined, undefined, {
+                    shininess: 3,
+                    specular: new Color(0x777777)
+                });
+                break;
+            case "rhea":
+                material = this.createPhongMaterial('src/img/saturn/moons/rhea4kalb.jpg', undefined, undefined, {
+                    shininess: 5,
+                    specular: new Color(0x404040)
+                });
+                break;
+            case "tethys":
+                material = this.createPhongMaterial('src/img/saturn/moons/tethys4kalb.jpg', undefined, undefined, {
+                    shininess: 3,
+                    specular: new Color(0x606060)
+                });
+                break;
+            case "titan":
+                material = this.createPhongMaterial('src/img/saturn/moons/Titan.png', undefined, undefined, {
+                    shininess: 3,
+                    specular: new Color(0x888888)
+                });
+                break;
+            // uranus moons
+            case "ariel":
+                material = this.createPhongMaterial('src/img/uranus/moons/Ariel-0.jpg', undefined, undefined, {
+                    shininess: 4,
+                    specular: new Color(0x555555)
+                });
+                break;
+            case "miranda":
+                material = this.createPhongMaterial('src/img/uranus/moons/miranda3.jpg', undefined, undefined, {
+                    shininess: 4,
+                    specular: new Color(0x555555)
+                });
+                break;
+            case "oberon":
+                material = this.createPhongMaterial('src/img/uranus/moons/Oberonmap1.png', undefined, undefined, {
+                    shininess: 3,
+                    specular: new Color(0xB09090)
+                });
+                break;
+            case "titania":
+                material = this.createPhongMaterial('src/img/uranus/moons/titania.jpg', undefined, undefined, {
+                    shininess: 4,
+                    specular: new Color(0x333333)
+                });
+            case "umbriel":
+                material = this.createPhongMaterial('src/img/uranus/moons/Umbriel.png', undefined, undefined, {
+                    shininess: 4,
+                    specular: new Color(0x202020)
+                });
+                break;
+            // Neptune moon
+            case "triton":
+                material = this.createPhongMaterial('src/img/neptune/triton.jpg', undefined, undefined, {
+                    shininess: 4,
+                    specular: new Color(0x202020)
+                });
+                break;
         }
         
-        const sphere = new Mesh(geometry, material);
-        this.add(sphere);
+        if (!this.isModel) {
+            const sphere = new Mesh(geometry, material);
+            this.add(sphere);
+        }
         if (parameters.tilt) {
             this.rotateX(parameters.tilt * Math.PI / 180);
         }
@@ -225,6 +360,24 @@ class Body extends Group {
         }
         ringGeometry.rotateX(Math.PI / 2);
         return ringGeometry;
+    }
+
+    loadModel(file, radius, materialProps) {
+        if (materialProps == undefined) materialProps = {};
+        this.isModel = true;
+        const loader = new GLTFLoader();
+        const self = this;
+        loader.load(file, function(gltf){
+            const model = gltf.scene.children[0];
+            let modelRadius = model.geometry.boundingSphere.radius;
+            const scaleFactor = radius / modelRadius;
+            model.geometry.scale(scaleFactor, scaleFactor, scaleFactor);
+            // model.material = new MeshPhongMaterial(materialProps);
+            for (let i in materialProps){
+                model.material[i] = materialProps[i];
+            }
+            self.add(model);
+        });
     }
 
     getOrbitPosition(jd) {
