@@ -85,7 +85,8 @@ class Bodies extends Object {
                 "i": 2.485,
                 "o": 113.665,
                 "w": 339.392,
-                "m": 317.020
+                "m": 317.020,
+                'tilt':27
             },
             {
                 "id": "uranus",

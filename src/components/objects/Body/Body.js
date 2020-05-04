@@ -1,4 +1,4 @@
-import { Group, SphereGeometry, MeshBasicMaterial, Mesh, Vector3, Matrix3, LineBasicMaterial, BufferGeometry, Line, TextureLoader, NearestFilter, MeshPhongMaterial, Vector2, Color } from 'three';
+import { Group, SphereGeometry, MeshBasicMaterial, Mesh, Vector3, Matrix3, LineBasicMaterial, BufferGeometry, Line, TextureLoader, NearestFilter, MeshPhongMaterial, Vector2, Color, PlaneGeometry, DoubleSide, RingGeometry, Geometry, Face3, RingBufferGeometry, Texture, MeshLambertMaterial } from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { TWEEN } from 'three/examples/jsm/libs/tween.module.min.js';
 
@@ -19,6 +19,7 @@ class Body extends Group {
         this.maxZoom = parameters.a * 10;
         const geometry = new SphereGeometry(radius,32,32);
         let material = new MeshBasicMaterial({color: 0xffff00});
+        let addons = []; // additional geometries (rings or clouds) to add to the planet
         switch (parameters.id) {
             case "terra_moon":
                 material = new MeshBasicMaterial({color: 0xff0000});
@@ -57,6 +58,24 @@ class Body extends Group {
                     shininess: 2,
                     specular: new Color(0x060606)
                 });
+
+                // add rings
+                // radius data from: https://nssdc.gsfc.nasa.gov/planetary/factsheet/satringfact.html
+                const innerR = radius * 1.11;
+                const outerR = radius * 2.27;
+                const ringGeometry = this.makeRing(innerR, outerR);
+                // var ringMaterial = new MeshBasicMaterial({color: 0xff0000, side: DoubleSide});
+                // let ringTexture = new TextureLoader().load('https://i.postimg.cc/zz7Gr430/saturn-rings-top.png');
+                let ringTexture = new TextureLoader().load('src/img/saturn/SatRing.png');
+                // let ringMaterial = new MeshPhongMaterial({
+                let ringMaterial = new MeshLambertMaterial({
+                    map: ringTexture,
+                    side: DoubleSide,
+                    transparent: true,
+                    opacity: 1,
+                    emissive: new Color(0x504D4D)
+                })
+                addons.push(new Mesh(ringGeometry, ringMaterial))
                 break;
             case "uranus":
                 material = this.createPhongMaterial('src/img/uranus/UranusJVV.png', undefined, undefined, {
@@ -73,6 +92,12 @@ class Body extends Group {
         
         const sphere = new Mesh(geometry, material);
         this.add(sphere);
+        if (parameters.tilt) {
+            this.rotateX(parameters.tilt * Math.PI / 180);
+        }
+        for (const a of addons) {
+            this.add(a);
+        }
 
         // Add self to scene's update list
         scene.addToUpdateList(this);
@@ -169,6 +194,20 @@ class Body extends Group {
         if (specMapFile) phongProps.specularMap = this.getTexture(specMapFile, minFilter);
         const material = new MeshPhongMaterial(phongProps);
         return material;
+    }
+
+    makeRing(innerR, outerR) {
+        // credits: https://discourse.threejs.org/t/applying-a-texture-to-a-ringgeometry/9990/2
+        // https://codepen.io/prisoner849/pen/zYOgroW?editors=0010
+        let ringGeometry = new RingBufferGeometry(innerR, outerR, 64);
+        let pos = ringGeometry.attributes.position;
+        let v3 = new Vector3();
+        for (let i = 0; i < pos.count; i++) {
+            v3.fromBufferAttribute(pos, i);
+            ringGeometry.attributes.uv.setXY(i, v3.length() < (innerR + outerR) / 2 ? 0 : 1, 1);
+        }
+        ringGeometry.rotateX(Math.PI / 2);
+        return ringGeometry;
     }
 
     getOrbitPosition(jd) {
