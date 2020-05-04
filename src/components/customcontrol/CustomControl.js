@@ -8,6 +8,7 @@ class CustomControl extends Object {
         window.addEventListener("wheel", this.handleZoom);
     }
 
+    // Code based off of: https://andreasrohner.at/posts/Web%20Development/JavaScript/Simple-orbital-camera-controls-for-THREE-js/
     handleDrag(event) {
         if (event.which == 1) {
             let deltaX = event.movementX;

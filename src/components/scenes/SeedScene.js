@@ -17,13 +17,14 @@ class SeedScene extends Scene {
             gui: new Dat.GUI(), // Create GUI for scene
             SimulationDaystoSecond: 10,
             pause: false,
-            showOrbitLines: false,
-            changeFocus: "Sol",
-            updateList: [],
+            showOrbitLines: true,
+            selectObject: "None",
+            updateList: [], // bodies that are rendered
+            sleepList: [] // bodies that are not loaded
         };
 
         // Fetch list of body parameters
-        const BODIES = new Bodies().bodyList;
+        this.BODIES = new Bodies().bodyList;
 
         // Set background to a nice color
         this.background = new Color(0x000000);
@@ -53,22 +54,36 @@ class SeedScene extends Scene {
         this.prevDay = 1;
 
         // Add meshes to scene
-        this.bodyIDs = ["Sol"];
+        this.focusList = ["Sol"];
+        this.changeFocus = "Sol";
         this.prevFocus = "Sol";
+        this.prevSelect = "None";
+        this.bodyIDs = ["None"];
         // sun
         const sun = new Sun();
         const starfield = new Starfield();
         //const flower = new Flower(this);
-        for (let i = 0; i < BODIES.length; i++) {
-            this.bodyIDs.push(BODIES[i].id);
-            if (BODIES[i].parent == -1) {
-                const body = new Body(this, this, BODIES[i]);
+        for (let i = 0; i < this.BODIES.length; i++) {
+            this.bodyIDs.push(this.BODIES[i].id);
+
+            // planets
+            if (this.BODIES[i].type == 0) {
+                this.focusList.push(this.BODIES[i].id);
+                const body = new Body(this, this, this.BODIES[i], i);
+                this.state.updateList.push(body);
                 this.add(body);
             }
+            // moons
+            else if (this.BODIES[i].type == 1) {
+                let parentObject = this.state.updateList[this.BODIES[i].parent]
+                const body = new Body(this, parentObject, this.BODIES[i], i);
+                this.state.sleepList.push(body);
+                //parentObject.add(body);
+            }
+            // not planest nor moons
             else {
-                let parentObject = this.state.updateList[BODIES[i].parent]
-                const body = new Body(this, parentObject, BODIES[i]);
-                parentObject.add(body);
+                const body = new Body(this, this, this.BODIES[i], i);
+                this.state.sleepList.push(body);
             }
         }
         
@@ -80,7 +95,9 @@ class SeedScene extends Scene {
         modifyGUI.add(this.state, 'SimulationDaystoSecond', -100, 100);
         modifyGUI.add(this.state, 'pause');
         modifyGUI.add(this.state, 'showOrbitLines');
-        modifyGUI.add(this.state, 'changeFocus', this.bodyIDs);
+        this.focusGUI = modifyGUI.add(this, 'changeFocus', this.focusList);
+        this.focusGUI.listen();
+        modifyGUI.add(this.state, 'selectObject', this.bodyIDs);
         modifyGUI.add(this, 'modYear');
         modifyGUI.add(this, 'modMonth', this.monthArray);
         modifyGUI.add(this, 'modDay');
@@ -94,10 +111,6 @@ class SeedScene extends Scene {
     addCamera(camera) {
         this.camera = camera;
         this.add(camera);
-    }
-
-    addToUpdateList(object) {
-        this.state.updateList.push(object);
     }
 
     // Convert a Julian Day number to a year, month, day
@@ -147,8 +160,27 @@ class SeedScene extends Scene {
         return false;
     }
 
+    // Update a DAT GUI list: https://stackoverflow.com/questions/16166440/refresh-dat-gui-with-new-values
+    updateDatDropdown(target, list){   
+        let innerHTMLStr = "";
+        if(list.constructor.name == 'Array'){
+            for(var i=0; i<list.length; i++){
+                var str = "<option value='" + list[i] + "'>" + list[i] + "</option>";
+                innerHTMLStr += str;        
+            }
+        }
+    
+        if(list.constructor.name == 'Object'){
+            for(var key in list){
+                var str = "<option value='" + list[key] + "'>" + key + "</option>";
+                innerHTMLStr += str;
+            }
+        }
+        if (innerHTMLStr != "") target.domElement.children[0].innerHTML = innerHTMLStr;
+    }
+
     update(timeStamp) {
-        const { SimulationDaystoSecond, pause, updateList, showOrbitLines, changeFocus } = this.state;
+        const { SimulationDaystoSecond, pause, updateList, sleepList, showOrbitLines, selectObject } = this.state;
         if (showOrbitLines && !this.prevOrbitLineToggle) {
             for (const obj of updateList) {
                 obj.toggleOrbitPathLine(showOrbitLines);
@@ -162,27 +194,145 @@ class SeedScene extends Scene {
         this.prevOrbitLineToggle = showOrbitLines;
 
         // camera
-        if (this.prevFocus != changeFocus) {
-            if (changeFocus === "Sol") {
+        if (this.prevFocus != this.changeFocus) {
+            if (this.changeFocus === "Sol") {
                 window.focusObj.remove(this.camera);
                 window.focusObj = this;
                 this.add(this.camera);
                 this.camera.position.clampLength(this.minZoom, this.maxZoom);
-                this.prevFocus = changeFocus;
+                this.prevFocus = this.changeFocus;
             }
             else {
                 for (const p of updateList) {
-                    if (p.bodyid === changeFocus) {
+                    if (p.bodyid === this.changeFocus) {
                         window.focusObj.remove(this.camera);
                         window.focusObj = p;
                         p.add(this.camera);
                         this.camera.position.clampLength(p.minZoom, p.maxZoom);
-                        this.prevFocus = changeFocus;
+                        this.prevFocus = this.changeFocus;
                         break;
                     }
                 }
             }
-        } 
+        }
+        
+        // body selector
+        if (this.prevSelect != selectObject) {
+
+            // de-select previous selection -> deload if not a planet. If planet de-load all moons
+            for (let i = 0; i < updateList.length; i++) {
+                const b = updateList[i];
+                if (b.bodyid === this.prevSelect) {
+                    b.selectThisObject(false);
+                    // not a planet or moon, deload
+                    if (b.type > 1) {
+                        b.toggleOrbitPathLine(false);
+                        b.parentBody.remove(b);
+                        sleepList.push(b);
+                        updateList.splice(i, 1);
+                        this.focusList.splice(this.focusList.indexOf(b.bodyid), 1);
+                        if (this.changeFocus === b.bodyid) {
+                            this.changeFocus = "Sol"
+                        }
+                    }
+                    else if (b.type == 1) { // deload all moons of the same planet
+                        let parentid = b.parentid;
+                        for (let j = 0; j < updateList.length; j++) {
+                            const p = updateList[j];
+                            if (parentid === p.parentid) {
+                                p.toggleOrbitPathLine(false);
+                                p.parentBody.remove(p);
+                                sleepList.push(p);
+                                updateList.splice(j, 1);
+                                this.focusList.splice(this.focusList.indexOf(p.bodyid), 1);
+                                if (this.changeFocus === p.bodyid) {
+                                    this.changeFocus = p.parentBody.bodyid;
+                                }
+                            }
+                        }
+                    }
+                    else if (b.type == 0) { // deload all moons of this planet
+                        let parentid = b.indexID;
+                        for (let j = 0; j < updateList.length; j++) {
+                            const p = updateList[j];
+                            if (parentid === p.parentid) {
+                                p.toggleOrbitPathLine(false);
+                                b.remove(p);
+                                sleepList.push(p);
+                                updateList.splice(j, 1);
+                                this.focusList.splice(this.focusList.indexOf(p.bodyid), 1);
+                                if (this.changeFocus === p.bodyid) {
+                                    this.changeFocus = b.bodyid;
+                                }
+                            }
+                        }
+                    }
+                    break;
+                }
+            }
+            this.prevSelect = selectObject;
+
+            // load new object and its moons if applicable
+            // Add to focus list, turn orbit lines to red, add to updatelist, take off of sleep list
+            if (selectObject != "None") {
+                // Should be a planet if in this list. Load moons
+                let found = false;
+                for (const b of updateList) {
+                    if (b.bodyid == selectObject) {
+                        b.selectThisObject(true);
+                        let parentid = b.indexID;
+                        for (let i = 0; i < sleepList.length; i++) {
+                            const p = sleepList[i];
+                            if (parentid === p.parentid) {
+                                b.add(p);
+                                updateList.push(p);
+                                sleepList.splice(i, 1);
+                                this.focusList.push(p.bodyid);
+                                p.toggleOrbitPathLine(showOrbitLines);
+                            }
+                        }
+                        found = true;
+                        break;
+                    }
+                }
+
+                // Search sleepList
+                if (!found) {
+                    for (let i = 0; i < sleepList.length; i++) {
+                        const b = sleepList[i];
+
+                        if (b.bodyid == selectObject) {
+                            let parentid = b.parentid;
+
+                            // Is moon
+                            if (parentid != -1) {
+                                for (let j = 0; j < sleepList.length; j++) {
+                                    const p = sleepList[j];
+                                    if (parentid === p.parentid) {
+                                        b.parentBody.add(p);
+                                        updateList.push(p);
+                                        sleepList.splice(j, 1);
+                                        this.focusList.push(p.bodyid);
+                                        p.toggleOrbitPathLine(showOrbitLines);
+                                    }
+                                }
+                            }
+                            else {
+                                b.parentBody.add(b);
+                                updateList.push(b);
+                                sleepList.splice(i, 1);
+                                this.focusList.push(b.bodyid);
+                                b.toggleOrbitPathLine(showOrbitLines);
+                            }
+
+                            found = true;
+                            break;
+                        }
+                    }
+                }
+            }
+            this.updateDatDropdown(this.focusGUI, this.focusList);
+        }
 
         if (!pause || this.dateToJD()) {
             this.JDtoDate(this.simulationTime);

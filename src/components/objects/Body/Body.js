@@ -4,7 +4,7 @@ import { TWEEN } from 'three/examples/jsm/libs/tween.module.min.js';
 
 class Body extends Group {
     
-    constructor(scene, parent, parameters) {
+    constructor(scene, parent, parameters, indexID) {
         // Call parent Group() constructor
         super();
 
@@ -14,9 +14,8 @@ class Body extends Group {
             radius = 0.005
         }
 
-        // this.minZoom = radius + 0.1;
-        this.minZoom = radius * 1.3;
-        this.maxZoom = parameters.a * 10;
+        this.type = parameters.type; // 0 for planet, 1 for moon, 2 for dwarf planet, 3 for asteroid, 4 for comet
+        
         const geometry = new SphereGeometry(radius,32,32);
         let material = new MeshBasicMaterial({color: 0xffff00});
         let addons = []; // additional geometries (rings or clouds) to add to the planet
@@ -99,20 +98,23 @@ class Body extends Group {
             this.add(a);
         }
 
-        // Add self to scene's update list
-        scene.addToUpdateList(this);
-
         function degToRad(angle) {
             return angle * Math.PI / 180;
         }
 
         this.a = parameters.a; // semi-major axis in AU
+        if (parameters.type == 1) {
+            this.a = 100 * this.a; // If object is a moon, increase the size of the orbit tenfold
+        }
         this.e = parameters.e; // eccentricity
         this.i = degToRad(parameters.i); // inclination
         this.o = degToRad(parameters.o); // longitude of ascending node
         this.w = degToRad(parameters.w); // argument of perihelion
         this.m = degToRad(parameters.m); // mean anomaly at J2000
         this.bodyid = parameters.id; // body name
+
+        this.minZoom = radius * 1.3;
+        this.maxZoom = this.a * 10;
 
         // Calculate Equatorial Position Vector 
         this.eqPosition = function(daysSinceJ2000) {
@@ -168,15 +170,30 @@ class Body extends Group {
         let orbitPathLineMaterial = new LineBasicMaterial({color: 0xffffff});
         let orbitPathLineGeo = new BufferGeometry().setFromPoints(this.orbitPositions);
         this.orbitPathLine = new Line(orbitPathLineGeo, orbitPathLineMaterial);
-        this.parent = parent;
+        this.internalOrbitPathToggle = false;
+
+        this.parentBody = parent;
+        this.parentid = parameters.parent;
+        this.indexID = indexID;
     }
 
     toggleOrbitPathLine(showOrbitPathLines) {
-        if (showOrbitPathLines) {
-            this.parent.add(this.orbitPathLine);
+        if (showOrbitPathLines && !this.internalOrbitPathToggle) {
+            this.parentBody.add(this.orbitPathLine);
+            this.internalOrbitPathToggle = true;
+        }
+        else if (!showOrbitPathLines && this.internalOrbitPathToggle) {
+            this.parentBody.remove(this.orbitPathLine);
+            this.internalOrbitPathToggle = false;
+        }
+    }
+
+    selectThisObject(on) {
+        if (on) {
+            this.orbitPathLine.material.color.setHex(0xff0000);
         }
         else {
-            this.parent.remove(this.orbitPathLine);
+            this.orbitPathLine.material.color.setHex(0xffffff);
         }
     }
 
