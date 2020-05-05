@@ -15,7 +15,8 @@ class Starfield extends Group {
         texture.minFilter = NearestFilter;
         
         const material = new MeshBasicMaterial({
-            envMap: cubeTex,
+            // envMap: cubeTex,
+            map: texture,
             side: BackSide // visible on the interior
         });
         const starfield = new Mesh(geometry, material);
