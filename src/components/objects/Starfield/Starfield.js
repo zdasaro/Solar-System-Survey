@@ -5,16 +5,17 @@ class Starfield extends Group {
         super();
 
         const geometry = new SphereGeometry(1000, 64, 64);
-        const texture = new TextureLoader().load('src/img/galaxy_starfield.png');
+        const texture = new TextureLoader().load('src/img/starfield/starmap_16k.jpg');
+        const cubeTex = new CubeTextureLoader().setPath('src/img/starfield/')
+            .load([
+                'xp.jpg', 'xm.jpg',
+                'yp.jpg', 'ym.jpg',
+                'zp.jpg', 'zm.jpg'
+            ]);
         texture.minFilter = NearestFilter;
-        // const texture = new CubeTextureLoader().setPath('src/img/star_cubemap/')
-        // .load([
-        //     'px.png', 'nx.png',
-        //     'py.png', 'ny.png',
-        //     'pz.png', 'nz.png'
-        // ]);
+        
         const material = new MeshBasicMaterial({
-            map: texture,
+            envMap: cubeTex,
             side: BackSide // visible on the interior
         });
         const starfield = new Mesh(geometry, material);
@@ -22,5 +23,28 @@ class Starfield extends Group {
         this.add(starfield);
     }
 }
+
+// class Starfield extends TextureLoader {
+//     constructor() {
+//         super();
+//     }
+//     loadMap() {
+//         return this.load('src/img/starfield/starmap_16k.jpg')
+//     }
+// }
+
+// class Starfield extends CubeTextureLoader {
+//     constructor() {
+//         super();
+//         this.setPath('src/img/starfield/')
+//     }
+//     loadMap() {
+//         return (this.load([
+//             'xp.jpg', 'xm.jpg',
+//             'yp.jpg', 'ym.jpg',
+//             'zp.jpg', 'zm.jpg'
+//         ]));
+//     }
+// }
 
 export default Starfield;

@@ -4,6 +4,7 @@ most planets and moons: http://www.celestiamotherlode.net/
 8k_saturn.jpg https://www.solarsystemscope.com/textures/
 Deimos: https://solarsystem.nasa.gov/resources/2434/deimos-3d-model/
 Phobos: https://solarsystem.nasa.gov/resources/2358/phobos-3d-model/
+Hyperion: https://solarsystem.nasa.gov/resources/2382/hyperion-3d-model/
 lens flares https://github.com/mrdoob/three.js/tree/master/examples/textures/lensflare
 Uranus moons Ariel, Umbriel, Oberon: https://planet-texture-maps.fandom.com/
 Titania: http://celestia.simulatorlabbs.com/CelSL/textures/medres/
