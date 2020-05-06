@@ -1,6 +1,20 @@
 import { Group, SphereGeometry, MeshBasicMaterial, Mesh, Vector3, Matrix3, LineBasicMaterial, BufferGeometry, Line, TextureLoader, NearestFilter, MeshPhongMaterial, Vector2, Color, PlaneGeometry, DoubleSide, RingGeometry, Geometry, Face3, RingBufferGeometry, Texture, MeshLambertMaterial } from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { TWEEN } from 'three/examples/jsm/libs/tween.module.min.js';
+import earthTexture from '../../../img/earth/Earth.png';
+import earthNormal from '../../../img/earth/Earth-normal-8k.png';
+import earthSpec from '../../../img/earth/EarthSpec.png';
+import mercuryTexture from '../../../img/mercury.jpg';
+import venusTexture from '../../../img/venus/4k_venus_atmosphere.jpg';
+import marsTexture from '../../../img/mars/Mars_4k.png';
+import marsNormal from '../../../img/mars/MarsNormal.png';
+import jupiterTexture from '../../../img/jupiter/Jupiter.png';
+import saturnTexture from '../../../img/saturn/8k_saturn.jpg';
+import saturnRing from '../../../img/saturn/SatRing.png';
+import uranusTexture from '../../../img/uranus/UranusJVV.png';
+import neptuneTexture from '../../../img/neptune/neptune2k.jpg';
+import earthMoonTexture from '../../../img/earth/moon/moon-4k.png';
+
 
 class Body extends Group {
     
@@ -23,36 +37,36 @@ class Body extends Group {
         switch (parameters.id) {
             // planets
             case "terra":
-                material = this.createPhongMaterial('src/img/earth/Earth.png', 'src/img/earth/Earth-normal-8k.png',
-                'src/img/earth/EarthSpec.png', {
+                material = this.createPhongMaterial(earthTexture, earthNormal,
+                earthSpec, {
                     normalScale: new Vector2(3, 3),
                     specular: new Color(0x262626)
                 });
                 break;
             case "mercury":
-                material = this.createPhongMaterial('src/img/mercury.jpg', undefined, undefined, {
+                material = this.createPhongMaterial(mercuryTexture, undefined, undefined, {
                     shininess: 10
                 });
                 break;
             case "venus":
-                material = this.createPhongMaterial('src/img/venus/4k_venus_atmosphere.jpg', undefined, undefined, {
+                material = this.createPhongMaterial(venusTexture, undefined, undefined, {
                     shininess: 5
                 });
                 break;
             case "mars":
-                material = this.createPhongMaterial('src/img/mars/Mars_4k.png', 'src/img/mars/MarsNormal.png', undefined, {
+                material = this.createPhongMaterial(marsTexture, marsNormal, undefined, {
                     normalScale: new Vector2(1.5, 1.5),
                     shininess: 5,
                     specular: new Color(0x262626)
                 });
                 break;
             case "jupiter":
-                material = this.createPhongMaterial('src/img/jupiter/Jupiter.png', undefined, undefined, {
+                material = this.createPhongMaterial(jupiterTexture, undefined, undefined, {
                     shininess: 10
                 });
                 break;
             case "saturn":
-                material = this.createPhongMaterial('src/img/saturn/8k_saturn.jpg', undefined, undefined, {
+                material = this.createPhongMaterial(saturnTexture, undefined, undefined, {
                     shininess: 2,
                     specular: new Color(0x060606)
                 });
@@ -64,7 +78,7 @@ class Body extends Group {
                 const ringGeometry = this.makeRing(innerR, outerR);
                 // var ringMaterial = new MeshBasicMaterial({color: 0xff0000, side: DoubleSide});
                 // let ringTexture = new TextureLoader().load('https://i.postimg.cc/zz7Gr430/saturn-rings-top.png');
-                let ringTexture = new TextureLoader().load('src/img/saturn/SatRing.png');
+                let ringTexture = new TextureLoader().load(saturnRing);
                 // let ringMaterial = new MeshPhongMaterial({
                 let ringMaterial = new MeshLambertMaterial({
                     map: ringTexture,
@@ -76,19 +90,19 @@ class Body extends Group {
                 addons.push(new Mesh(ringGeometry, ringMaterial))
                 break;
             case "uranus":
-                material = this.createPhongMaterial('src/img/uranus/UranusJVV.png', undefined, undefined, {
+                material = this.createPhongMaterial(uranusTexture, undefined, undefined, {
                     shininess: 4,
                     specular: new Color(0x505050)
                 });
                 break;
             case "neptune":
-                material = this.createPhongMaterial('src/img/neptune/neptune2k.jpg', undefined, undefined, {
+                material = this.createPhongMaterial(neptuneTexture, undefined, undefined, {
                     shininess: 10
                 });
                 break;
             // moons
             case "terra_moon":
-                material = this.createPhongMaterial('src/img/earth/moon/moon-4k.png', 'src/img/earth/moon/moon_normal.jpg', undefined, {
+                material = this.createPhongMaterial(earthMoonTexture, 'src/img/earth/moon/moon_normal.jpg', undefined, {
                     shininess: 4,
                     specular: new Color(0x333333)
                 });

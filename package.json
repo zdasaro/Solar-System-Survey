@@ -1,6 +1,6 @@
 {
-  "name": "lower-case-dashed-name-of-project",
-  "repository": "REPOSITORY-NAME-AS-IT-APPEARS-IN-GITHUB-URL",
+  "name": "solar-system-survey",
+  "repository": "Solar-System-Survey",
   "version": "0.1.0",
   "title": "Solar System Survey",
   "description": "Graphical simulation of the solar system",
@@ -18,7 +18,7 @@
   ],
   "scripts": {
     "start": "webpack-dev-server --mode development --output-public-path \"\"",
-    "prebuild": "rimraf ./build && mkdir ./build",
+    "prebuild": "rimraf ./build && mkdirp ./build",
     "build": "npm run prebuild && webpack --mode production --output-public-path \"\"",
     "format": "prettier --write '*.js' 'src/**/*.js'",
     "deploy": "npm run prebuild && webpack --mode production && gh-pages -d build"
@@ -36,6 +36,7 @@
     "file-loader": "^6.0.0",
     "gh-pages": "^2.2.0",
     "html-webpack-plugin": "^4.2.1",
+    "mkdirp": "^1.0.4",
     "prettier": "^2.0.4",
     "raw-loader": "^4.0.1",
     "rimraf": "^3.0.2",
