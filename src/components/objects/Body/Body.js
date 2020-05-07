@@ -1,6 +1,5 @@
 import { Group, SphereGeometry, MeshBasicMaterial, Mesh, Vector3, Matrix3, LineBasicMaterial, BufferGeometry, Line, TextureLoader, NearestFilter, MeshPhongMaterial, Vector2, Color, PlaneGeometry, DoubleSide, RingGeometry, Geometry, Face3, RingBufferGeometry, Texture, MeshLambertMaterial } from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
-import { TWEEN } from 'three/examples/jsm/libs/tween.module.min.js';
 import earthTexture from '../../../img/earth/Earth.png';
 import earthNormal from '../../../img/earth/Earth-normal-8k.png';
 import earthSpec from '../../../img/earth/EarthSpec.png';
@@ -14,6 +13,30 @@ import saturnRing from '../../../img/saturn/SatRing.png';
 import uranusTexture from '../../../img/uranus/UranusJVV.png';
 import neptuneTexture from '../../../img/neptune/neptune2k.jpg';
 import earthMoonTexture from '../../../img/earth/moon/moon-4k.png';
+import earthMoonNormal from '../../../img/earth/moon/moon_normal.jpg';
+import callistoTexture from '../../../img/jupiter/moons/Callisto.png';
+import callistoNormal from '../../../img/jupiter/moons/CallistoNormal.png';
+import europaTexture from '../../../img/jupiter/moons/Europa.png';
+import ganymedeTexture from '../../../img/jupiter/moons/ganymede.jpg';
+import ioTexture from '../../../img/jupiter/moons/Io.png';
+import ioNormal from '../../../img/jupiter/moons/IoNormal.png';
+import deimosModel from '../../../img/mars/moons/Deimos_1_1000.glb';
+import phobosModel from '../../../img/mars/moons/Phobos_1_1000.glb';
+import dioneTexture from '../../../img/saturn/moons/Dione.jpg';
+import enceladusTexture from '../../../img/saturn/moons/Enceladus.png';
+import hyperionModel from '../../../img/saturn/moons/Hyperion_1_1000.glb';
+import iapetusTexture from '../../../img/saturn/moons/iapetus4kalb.jpg';
+import mimasTexture from '../../../img/saturn/moons/mimas2kalb.jpg';
+import rheaTexture from '../../../img/saturn/moons/rhea4kalb.jpg';
+import tethysTexture from '../../../img/saturn/moons/tethys4kalb.jpg';
+import titanTexture from '../../../img/saturn/moons/Titan.png';
+import arielTexture from '../../../img/uranus/moons/Ariel-0.jpg';
+import mirandaTexture from '../../../img/uranus/moons/miranda3.jpg';
+import oberonTexture from '../../../img/uranus/moons/Oberonmap1.png';
+import titaniaTexture from '../../../img/uranus/moons/titania.jpg';
+import umbrielTexture from '../../../img/uranus/moons/Umbriel.png';
+import tritonTexture from '../../../img/neptune/triton.jpg';
+
 
 
 class Body extends Group {
@@ -23,7 +46,7 @@ class Body extends Group {
         super();
 
         // Set the radius to be 600 times its real size. If the radius is less than 0.005 world units, set that as the floor
-        let radius = parameters.radius * 4e-6 // temporary parameter
+        let radius = parameters.radius * 4e-6 / 600 // temporary parameter
         if (radius < 0.005) {
             radius = 0.005
         }
@@ -100,136 +123,132 @@ class Body extends Group {
                     shininess: 10
                 });
                 break;
-            // moons
+            /////// moons
+            // earth moon
             case "terra_moon":
-                material = this.createPhongMaterial(earthMoonTexture, 'src/img/earth/moon/moon_normal.jpg', undefined, {
+                material = this.createPhongMaterial(earthMoonTexture, earthMoonNormal, undefined, {
                     shininess: 4,
                     specular: new Color(0x333333)
                 });
                 break;
+            // jupiter moons
             case "callisto":
-                material = this.createPhongMaterial('src/img/jupiter/moons/Callisto.png', 'src/img/jupiter/moons/CallistoNormal.png', undefined, {
+                material = this.createPhongMaterial(callistoTexture, callistoNormal, undefined, {
                     shininess: 3,
                     specular: new Color(0x898989), // Callisto is very bright
                     normalScale: new Vector2(0.7, 0.7)
                 });
                 break;
             case "europa":
-                material = this.createPhongMaterial('src/img/jupiter/moons/Europa.png', undefined, undefined, {
+                material = this.createPhongMaterial(europaTexture, undefined, undefined, {
                     shininess: 8,
                     specular: new Color(0x211511) // red-orange tint
                 });
                 break;
             case "ganymede":
-                material = this.createPhongMaterial('src/img/jupiter/moons/ganymede.jpg', undefined, undefined, {
+                material = this.createPhongMaterial(ganymedeTexture, undefined, undefined, {
                     shininess: 5,
                     specular: new Color(0x555555)
                 });
                 break;
             case "io":
-                material = this.createPhongMaterial('src/img/jupiter/moons/Io.png', 'src/img/jupiter/moons/IoNormal.png', undefined, {
+                material = this.createPhongMaterial(ioTexture, ioNormal, undefined, {
                     specular: new Color(0x606022), // yellow tint
                     shininess: 5
                 });
                 break;
             // Mars moons
             case "deimos":
-                this.loadModel('src/img/mars/moons/Deimos_1_1000.glb', radius, {
+                this.loadModel(deimosModel, radius, {
                     // specular: new Color(0xB08060),
                     // color: new Color(0xB08060)
                 });
                 break;
             case "phobos":
-                this.loadModel('src/img/mars/moons/Phobos_1_1000.glb', radius, {
+                this.loadModel(phobosModel, radius, {
                     // specular: new Color(0xB08060),
                     // color: new Color(0x958575)
                 });
                 break;
             // Saturn moons
             case "dione":
-                material = this.createPhongMaterial('src/img/saturn/moons/Dione.jpg', undefined, undefined, {
+                material = this.createPhongMaterial(dioneTexture, undefined, undefined, {
                     shininess: 5,
                     specular: new Color(0x555555)
                 });
                 break;
             case "enceladus":
-                material = this.createPhongMaterial('src/img/saturn/moons/Enceladus.png', undefined, undefined, {
+                material = this.createPhongMaterial(enceladusTexture, undefined, undefined, {
                     shininess: 5,
                     specular: new Color(0x555555)
                 });
                 break;
             case "hyperion":
-                this.loadModel('src/img/saturn/moons/Hyperion_1_1000.glb', radius);
+                this.loadModel(hyperionModel, radius);
                 break;
             case "iapetus":
-                material = this.createPhongMaterial('src/img/saturn/moons/iapetus4kalb.jpg', undefined, undefined, {
+                material = this.createPhongMaterial(iapetusTexture, undefined, undefined, {
                     shininess: 3,
                     specular: new Color(0x555555)
                 });
                 break;
             case "mimas":
-                material = this.createPhongMaterial('src/img/saturn/moons/mimas2kalb.jpg', undefined, undefined, {
-                    shininess: 3,
-                    specular: new Color(0x777777)
-                });
-                break;
-            case "phoebe":
-                material = this.createPhongMaterial('src/img/saturn/moons/JVV_Phoebe.png', undefined, undefined, {
+                material = this.createPhongMaterial(mimasTexture, undefined, undefined, {
                     shininess: 3,
                     specular: new Color(0x777777)
                 });
                 break;
             case "rhea":
-                material = this.createPhongMaterial('src/img/saturn/moons/rhea4kalb.jpg', undefined, undefined, {
+                material = this.createPhongMaterial(rheaTexture, undefined, undefined, {
                     shininess: 5,
                     specular: new Color(0x404040)
                 });
                 break;
             case "tethys":
-                material = this.createPhongMaterial('src/img/saturn/moons/tethys4kalb.jpg', undefined, undefined, {
+                material = this.createPhongMaterial(tethysTexture, undefined, undefined, {
                     shininess: 3,
                     specular: new Color(0x606060)
                 });
                 break;
             case "titan":
-                material = this.createPhongMaterial('src/img/saturn/moons/Titan.png', undefined, undefined, {
+                material = this.createPhongMaterial(titanTexture, undefined, undefined, {
                     shininess: 3,
                     specular: new Color(0x888888)
                 });
                 break;
             // uranus moons
             case "ariel":
-                material = this.createPhongMaterial('src/img/uranus/moons/Ariel-0.jpg', undefined, undefined, {
+                material = this.createPhongMaterial(arielTexture, undefined, undefined, {
                     shininess: 4,
                     specular: new Color(0x555555)
                 });
                 break;
             case "miranda":
-                material = this.createPhongMaterial('src/img/uranus/moons/miranda3.jpg', undefined, undefined, {
+                material = this.createPhongMaterial(mirandaTexture, undefined, undefined, {
                     shininess: 4,
                     specular: new Color(0x555555)
                 });
                 break;
             case "oberon":
-                material = this.createPhongMaterial('src/img/uranus/moons/Oberonmap1.png', undefined, undefined, {
+                material = this.createPhongMaterial(oberonTexture, undefined, undefined, {
                     shininess: 3,
                     specular: new Color(0xB09090)
                 });
                 break;
             case "titania":
-                material = this.createPhongMaterial('src/img/uranus/moons/titania.jpg', undefined, undefined, {
+                material = this.createPhongMaterial(titaniaTexture, undefined, undefined, {
                     shininess: 4,
                     specular: new Color(0x333333)
                 });
             case "umbriel":
-                material = this.createPhongMaterial('src/img/uranus/moons/Umbriel.png', undefined, undefined, {
+                material = this.createPhongMaterial(umbrielTexture, undefined, undefined, {
                     shininess: 4,
                     specular: new Color(0x202020)
                 });
                 break;
             // Neptune moon
             case "triton":
-                material = this.createPhongMaterial('src/img/neptune/triton.jpg', undefined, undefined, {
+                material = this.createPhongMaterial(tritonTexture, undefined, undefined, {
                     shininess: 4,
                     specular: new Color(0x202020)
                 });
