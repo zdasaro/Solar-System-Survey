@@ -6,13 +6,28 @@
  * handles window resizes.
  *
  */
-import { WebGLRenderer, PerspectiveCamera, Vector3 } from 'three';
-import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
+import { WebGLRenderer, PerspectiveCamera, Vector3, LoadingManager } from 'three';
 import { SeedScene } from 'scenes';
 import { CustomControl } from 'customcontrol';
+import { Interface } from 'interface';
 
 // Initialize core ThreeJS components
-const scene = new SeedScene();
+const load_screen = new Interface();
+
+const loadingManager = new LoadingManager( () => {
+    const loadingScreen = document.getElementById( 'loading-screen' );
+    loadingScreen.classList.add( 'fade-out' );
+} );
+const scene = new SeedScene(loadingManager);
+
+loadingManager.onLoad = function() {
+    document.getElementById( 'loading-screen' ).remove();
+    document.body.style.margin = 0; // Removes margin around page
+    document.body.style.overflow = 'hidden'; // Fix scrolling
+    document.body.appendChild(canvas);
+    scene.addGUI();
+};
+
 const renderer = new WebGLRenderer({ antialias: true });
 const controls = new CustomControl();
 window.selectId = "Sol";
@@ -27,9 +42,6 @@ scene.addCamera(window.cam);
 renderer.setPixelRatio(window.devicePixelRatio);
 const canvas = renderer.domElement;
 canvas.style.display = 'block'; // Removes padding below canvas
-document.body.style.margin = 0; // Removes margin around page
-document.body.style.overflow = 'hidden'; // Fix scrolling
-document.body.appendChild(canvas);
 
 // Render loop
 const onAnimationFrameHandler = (timeStamp) => {
