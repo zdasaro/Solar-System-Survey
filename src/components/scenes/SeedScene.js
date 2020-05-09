@@ -5,7 +5,7 @@ import { BasicLights } from 'lights';
 import {Bodies} from '.';
 
 class SeedScene extends Scene {
-    constructor() {
+    constructor(loadingManager) {
         // Call parent Scene() constructor
         super();
 
@@ -14,7 +14,6 @@ class SeedScene extends Scene {
 
         // Init state
         this.state = {
-            gui: new Dat.GUI(), // Create GUI for scene
             SimulationDaystoSecond: 10,
             pause: false,
             showOrbitLines: true,
@@ -60,7 +59,7 @@ class SeedScene extends Scene {
         this.bodyIDs = ["Sol"];
         // sun
         // const sun = new Sun();
-        const starfield = new Starfield();
+        const starfield = new Starfield(loadingManager);
         //const flower = new Flower(this);
         for (let i = 0; i < this.BODIES.length; i++) {
             this.bodyIDs.push(this.BODIES[i].id);
@@ -86,10 +85,13 @@ class SeedScene extends Scene {
             }
         }
         
-        const lights = new BasicLights();
+        const lights = new BasicLights(loadingManager);
         this.add(/*sun, */lights, starfield);
         // this.background = new Starfield().loadMap();
+    }
 
+    addGUI() {
+        this.state.gui =  new Dat.GUI(); // Create GUI for scene
         // Populate GUI
         var modifyGUI = this.state.gui.addFolder('Modifiable Values');
         modifyGUI.add(this.state, 'SimulationDaystoSecond', -100, 100);

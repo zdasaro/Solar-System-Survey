@@ -6,13 +6,22 @@
  * handles window resizes.
  *
  */
-import { WebGLRenderer, PerspectiveCamera, Vector3 } from 'three';
+import { WebGLRenderer, PerspectiveCamera, Vector3, LoadingManager } from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
-import { SeedScene } from 'scenes';
+import { SeedScene, LoadingScreen } from 'scenes';
 import { CustomControl } from 'customcontrol';
 
 // Initialize core ThreeJS components
-const scene = new SeedScene();
+var RESOURCES_LOADED = false;
+var loadingManager = new LoadingManager();
+const scene = new SeedScene(loadingManager);
+
+loadingManager.onLoad = function() {
+    RESOURCES_LOADED = true;
+    scene.addGUI();
+};
+const loadingscreen = new LoadingScreen();
+
 const renderer = new WebGLRenderer({ antialias: true });
 const controls = new CustomControl();
 window.selectId = "Sol";
@@ -33,6 +42,12 @@ document.body.appendChild(canvas);
 
 // Render loop
 const onAnimationFrameHandler = (timeStamp) => {
+    if (RESOURCES_LOADED == false) {
+        renderer.render(loadingscreen.scene, loadingscreen.camera);
+        loadingscreen.scene.update && loadingscreen.scene.update(timeStamp);
+        window.requestAnimationFrame(onAnimationFrameHandler);
+        return;
+    }
     renderer.render(scene, window.cam);
     scene.update && scene.update(timeStamp);
     window.requestAnimationFrame(onAnimationFrameHandler);

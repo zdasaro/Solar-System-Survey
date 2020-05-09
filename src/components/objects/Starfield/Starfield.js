@@ -2,11 +2,11 @@ import { Group, SphereGeometry, MeshBasicMaterial, Mesh, BackSide, TextureLoader
 import skymap from "../../../img/starfield/TychoSkymap8k.jpg"
 
 class Starfield extends Group {
-    constructor() {
+    constructor(loadingManager) {
         super();
 
         const geometry = new SphereGeometry(748000000, 64, 64);
-        const texture = new TextureLoader().load(skymap);
+        const texture = new TextureLoader(loadingManager).load(skymap);
         texture.minFilter = NearestFilter; // this makes the stars look sharper, but dim stars disappear if the display resolution is too low. LinearFilter would fix this but make the stars blurrier.
         
         const material = new MeshBasicMaterial({
