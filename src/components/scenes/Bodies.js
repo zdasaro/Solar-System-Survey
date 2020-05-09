@@ -119,7 +119,7 @@ class Bodies extends Object {
             },
             // EARTH'S MOON
             {
-                "id": "terra_moon",
+                "id": "luna",
                 "type": 1,
                 "parent": 2,
                 "parentMass": 3.003963e-6,
@@ -131,6 +131,35 @@ class Bodies extends Object {
                 "o": 125.08,
                 "w": 318.15,
                 "m": 135.27
+            },
+            // MOONS OF MARS
+            {
+                "id": "deimos",
+                "type": 1,
+                "parent": 3,
+                "parentMass": 3.213e-7,
+                "mu": 4.282837e13,
+                "radius": 6.2,
+                "a": 0.000157,
+                "e": 0.0002,
+                "i": 1.788,
+                "o": 24.525,
+                "w": 260.729,
+                "m": 325.329
+            },
+            {
+                "id": "phobos",
+                "type": 1,
+                "parent": 3,
+                "parentMass": 3.213e-7,
+                "mu": 4.282837e13,
+                "radius": 11.2667,
+                "a": 0.000063,
+                "e": 0.0151,
+                "i": 1.075,
+                "o": 207.784,
+                "w": 150.057,
+                "m": 91.059
             },
             // MOONS OF JUPITER
             {
@@ -188,35 +217,6 @@ class Bodies extends Object {
                 "o": 43.977,
                 "w": 84.129,
                 "m": 342.021
-            },
-            // MOONS OF MARS
-            {
-                "id": "deimos",
-                "type": 1,
-                "parent": 3,
-                "parentMass": 3.213e-7,
-                "mu": 4.282837e13,
-                "radius": 6.2,
-                "a": 0.000157,
-                "e": 0.0002,
-                "i": 1.788,
-                "o": 24.525,
-                "w": 260.729,
-                "m": 325.329
-            },
-            {
-                "id": "phobos",
-                "type": 1,
-                "parent": 3,
-                "parentMass": 3.213e-7,
-                "mu": 4.282837e13,
-                "radius": 11.2667,
-                "a": 0.000063,
-                "e": 0.0151,
-                "i": 1.075,
-                "o": 207.784,
-                "w": 150.057,
-                "m": 91.059
             },
             // MOONS OF SATURN
             {

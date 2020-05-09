@@ -126,7 +126,7 @@ class Body extends Group {
                 break;
             /////// moons
             // earth moon
-            case "terra_moon":
+            case "luna":
                 material = this.createPhongMaterial(earthMoonTexture, earthMoonNormal, undefined, {
                     shininess: 4,
                     specular: new Color(0x333333)
