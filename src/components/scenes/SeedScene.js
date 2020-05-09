@@ -257,6 +257,7 @@ class SeedScene extends Scene {
                             const p = defaultSleepList[i];
                             if (parentid === p.parentid) {
                                 b.add(p);
+                                p.update(this.simulationTime);
                                 newUpdateList.push(p);
                                 p.toggleOrbitPathLine(showOrbitLines);
                             }
@@ -280,14 +281,18 @@ class SeedScene extends Scene {
                                     const p = defaultSleepList[j];
                                     if (parentid === p.parentid) {
                                         b.parentBody.add(p);
+                                        p.update(this.simulationTime);
                                         newUpdateList.push(p);
                                         p.toggleOrbitPathLine(showOrbitLines);
-                                        p.selectThisObject(true);
+                                        if (p.bodyid === b.bodyid) {
+                                            p.selectThisObject(true);
+                                        }
                                     }
                                 }
                             }
                             else {
                                 b.parentBody.add(b);
+                                b.update(this.simulationTime);
                                 newUpdateList.push(b);
                                 b.toggleOrbitPathLine(showOrbitLines);
                                 b.selectThisObject(true);

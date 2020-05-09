@@ -284,7 +284,15 @@ class Body extends Group {
 
         // Calculate Equatorial Position Vector 
         this.eqPosition = function(daysSinceJ2000) {
-            let n = 0.01720209894 * Math.sqrt(1.0 / Math.pow(this.a, 3));
+            let n;
+            if (parameters.mu == -1) {
+                n = 0.01720209894 * Math.sqrt(1.0 / Math.pow(this.a, 3));
+            }
+            else {
+                let aMeters = this.a * 1.496e11;
+                n = Math.sqrt(parameters.mu / Math.pow(aMeters, 3)) * 86400;
+            }
+            
             let mNow = n * daysSinceJ2000 + this.m;
 
             // Use Newton's Method to approximate E (true anomaly)
@@ -323,10 +331,13 @@ class Body extends Group {
             return new Vector3(posVector.y, posVector.z, posVector.x);
         }
 
-        this.lengthTimeSlice = 0.1; // in days
         this.orbitPositions = [] // Orbit positions for each day
 
         this.orbitalPeriod = Math.sqrt(Math.pow(this.a, 3) / parameters.parentMass) * 365.25; // in days
+        this.lengthTimeSlice = this.orbitalPeriod / 3000; // in days
+        if (this.lengthTimeSlice > 1) {
+            this.lengthTimeSlice = 1;
+        }
         let numTimeSlices = Math.floor(this.orbitalPeriod / this.lengthTimeSlice);
         for (let i = 0; i < numTimeSlices; i++) {
             this.orbitPositions.push(this.eqPosition(i * this.lengthTimeSlice).multiplyScalar(this.auToWorldUnits))
