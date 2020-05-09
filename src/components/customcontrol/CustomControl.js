@@ -6,6 +6,14 @@ class CustomControl extends Object {
         super();
         window.addEventListener("mousemove", this.handleDrag);
         window.addEventListener("wheel", this.handleZoom);
+        window.addEventListener("keydown", this.handleKey);
+    }
+
+    // Handle key presses
+    handleKey(event) {
+        if (event.key === "f") {
+            window.focusId = window.selectId;
+        }
     }
 
     // Code based off of: https://andreasrohner.at/posts/Web%20Development/JavaScript/Simple-orbital-camera-controls-for-THREE-js/
