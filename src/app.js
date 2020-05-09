@@ -16,8 +16,8 @@ const scene = new SeedScene();
 const renderer = new WebGLRenderer({ antialias: true });
 const controls = new CustomControl();
 window.focusObj = scene;
-window.cam = new PerspectiveCamera(undefined, undefined, 0.001);
-window.cam.position.set(6, 3, -10);
+window.cam = new PerspectiveCamera(undefined, undefined, 0.001, 1500000000);
+window.cam.position.set(6000, 3000, -1000);
 window.cam.lookAt(new Vector3(0, 0, 0));
 scene.addCamera(window.cam);
 

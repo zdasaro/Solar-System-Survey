@@ -5,7 +5,7 @@ class Starfield extends Group {
     constructor() {
         super();
 
-        const geometry = new SphereGeometry(1000, 64, 64);
+        const geometry = new SphereGeometry(748000000, 64, 64);
         const texture = new TextureLoader().load(skymap);
         texture.minFilter = NearestFilter; // this makes the stars look sharper, but dim stars disappear if the display resolution is too low. LinearFilter would fix this but make the stars blurrier.
         

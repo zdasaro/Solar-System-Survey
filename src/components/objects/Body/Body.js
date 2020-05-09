@@ -45,8 +45,9 @@ class Body extends Group {
         // Call parent Group() constructor
         super();
 
+        this.auToWorldUnits = 748000; // 1 AU is how many world units
         // Set the radius to be 600 times its real size. If the radius is less than 0.005 world units, set that as the floor
-        let radius = parameters.radius * 4e-6 / 600 // temporary parameter
+        let radius = parameters.radius * 6.6846e-9 * this.auToWorldUnits; // temporary parameter
         if (radius < 0.005) {
             radius = 0.005
         }
@@ -271,9 +272,6 @@ class Body extends Group {
         }
 
         this.a = parameters.a; // semi-major axis in AU
-        if (parameters.type == 1) {
-            this.a = 100 * this.a; // If object is a moon, increase the size of the orbit tenfold
-        }
         this.e = parameters.e; // eccentricity
         this.i = degToRad(parameters.i); // inclination
         this.o = degToRad(parameters.o); // longitude of ascending node
@@ -282,7 +280,7 @@ class Body extends Group {
         this.bodyid = parameters.id; // body name
 
         this.minZoom = radius * 1.3;
-        this.maxZoom = this.a * 10;
+        this.maxZoom = 70000000;
 
         // Calculate Equatorial Position Vector 
         this.eqPosition = function(daysSinceJ2000) {
@@ -325,7 +323,6 @@ class Body extends Group {
             return new Vector3(posVector.y, posVector.z, posVector.x);
         }
 
-        this.auToWorldUnits = 10; // 1 AU is how many world units
         this.lengthTimeSlice = 0.1; // in days
         this.orbitPositions = [] // Orbit positions for each day
 

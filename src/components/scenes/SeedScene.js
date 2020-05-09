@@ -9,8 +9,8 @@ class SeedScene extends Scene {
         // Call parent Scene() constructor
         super();
 
-        this.minZoom = 4;
-        this.maxZoom = 1000;
+        this.minZoom = 4000;
+        this.maxZoom = 74800000;
 
         // Init state
         this.state = {
