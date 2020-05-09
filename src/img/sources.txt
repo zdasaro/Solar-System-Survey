@@ -8,4 +8,6 @@ lens flares https://github.com/mrdoob/three.js/tree/master/examples/textures/len
 Uranus moons Ariel, Umbriel, Oberon: https://planet-texture-maps.fandom.com/
 Titania: http://celestia.simulatorlabbs.com/CelSL/textures/medres/
 Starfield: https://svs.gsfc.nasa.gov/3572
-Comet Halley, Asteroid Pallas: https://3d-asteroids.space/
+Comet Halley, Asteroid Pallas, Hygiea: https://3d-asteroids.space/
+Comet Hartley (model used for comet Borelly): https://3d-asteroids.space/comets/103P-Hartley-2
+

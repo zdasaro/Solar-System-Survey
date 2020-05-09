@@ -49,7 +49,7 @@ import pallasModel from '../../../img/asteroids/Pallas.obj';
 import hygieaModel from '../../../img/asteroids/Hygiea Vernazza 2018.obj';
 import vestaModel from '../../../img/asteroids/Vesta_1_100.glb';
 import objTexture from '../../../img/comets/comet.jpg';
-
+import borrellyModel from '../../../img/comets/Hartley 2.obj';
 
 class Body extends Group {
     
@@ -67,7 +67,7 @@ class Body extends Group {
         this.type = parameters.type; // 0 for planet, 1 for moon, 2 for dwarf planet, 3 for asteroid, 4 for comet
         
         const geometry = new SphereGeometry(radius,32,32);
-        let material = new MeshBasicMaterial({color: 0xffff00});
+        let material = new MeshBasicMaterial({color: 0xffff00}); // placeholder
         let addons = []; // additional geometries (rings or clouds) to add to the planet
         this.isModel = false;
         switch (parameters.id) {
@@ -311,6 +311,9 @@ class Body extends Group {
             // comets
             case "1P/Halley":
                 this.loadModel(halleyModel, radius, {}, true);
+                break;
+            case "19P/Borrelly":
+                this.loadModel(borrellyModel, radius, {}, true);
                 break;
         }
         
