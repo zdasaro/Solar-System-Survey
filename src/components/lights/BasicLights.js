@@ -34,7 +34,9 @@ class BasicLights extends Group {
     }
 
     updateLightSize() {
-        let factor = Math.log2(window.cam.position.length());
+        let worldPos = new Vector3();
+        window.cam.getWorldPosition(worldPos);
+        let factor = Math.log2(worldPos.length());
         this.lensflare_element.size = 50000000 / (Math.pow(factor, 4));
     }
 }
