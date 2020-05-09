@@ -7,20 +7,26 @@
  *
  */
 import { WebGLRenderer, PerspectiveCamera, Vector3, LoadingManager } from 'three';
-import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
-import { SeedScene, LoadingScreen } from 'scenes';
+import { SeedScene } from 'scenes';
 import { CustomControl } from 'customcontrol';
+import { Interface } from 'interface';
 
 // Initialize core ThreeJS components
-var RESOURCES_LOADED = false;
-var loadingManager = new LoadingManager();
+const load_screen = new Interface();
+
+const loadingManager = new LoadingManager( () => {
+    const loadingScreen = document.getElementById( 'loading-screen' );
+    loadingScreen.classList.add( 'fade-out' );
+} );
 const scene = new SeedScene(loadingManager);
 
 loadingManager.onLoad = function() {
-    RESOURCES_LOADED = true;
+    document.getElementById( 'loading-screen' ).remove();
+    document.body.style.margin = 0; // Removes margin around page
+    document.body.style.overflow = 'hidden'; // Fix scrolling
+    document.body.appendChild(canvas);
     scene.addGUI();
 };
-const loadingscreen = new LoadingScreen();
 
 const renderer = new WebGLRenderer({ antialias: true });
 const controls = new CustomControl();
@@ -36,18 +42,9 @@ scene.addCamera(window.cam);
 renderer.setPixelRatio(window.devicePixelRatio);
 const canvas = renderer.domElement;
 canvas.style.display = 'block'; // Removes padding below canvas
-document.body.style.margin = 0; // Removes margin around page
-document.body.style.overflow = 'hidden'; // Fix scrolling
-document.body.appendChild(canvas);
 
 // Render loop
 const onAnimationFrameHandler = (timeStamp) => {
-    if (RESOURCES_LOADED == false) {
-        renderer.render(loadingscreen.scene, loadingscreen.camera);
-        loadingscreen.scene.update && loadingscreen.scene.update(timeStamp);
-        window.requestAnimationFrame(onAnimationFrameHandler);
-        return;
-    }
     renderer.render(scene, window.cam);
     scene.update && scene.update(timeStamp);
     window.requestAnimationFrame(onAnimationFrameHandler);

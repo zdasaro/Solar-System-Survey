@@ -46,7 +46,8 @@ module.exports = {
             lights$: path.resolve(__dirname, 'src/components/lights'),
             objects$: path.resolve(__dirname, 'src/components/objects'),
             scenes$: path.resolve(__dirname, 'src/components/scenes'),
-            customcontrol$: path.resolve(__dirname, 'src/components/customcontrol')
+            customcontrol$: path.resolve(__dirname, 'src/components/customcontrol'),
+            interface$: path.resolve(__dirname, 'src/components/interface')
         },
     },
     plugins: [
