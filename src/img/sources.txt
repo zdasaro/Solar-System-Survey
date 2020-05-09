@@ -1,10 +1,11 @@
 most planets and moons: http://www.celestiamotherlode.net/
 4k_venus_atmosphere.jpg: https://www.solarsystemscope.com/textures/
 8k_saturn.jpg https://www.solarsystemscope.com/textures/
-Deimos: https://solarsystem.nasa.gov/resources/2434/deimos-3d-model/
-Phobos: https://solarsystem.nasa.gov/resources/2358/phobos-3d-model/
+Phobos, Deimos, Haumea: https://solarsystem.nasa.gov/resources
+Makemake: https://www.solarsystemscope.com/textures/
 Hyperion: https://solarsystem.nasa.gov/resources/2382/hyperion-3d-model/
 lens flares https://github.com/mrdoob/three.js/tree/master/examples/textures/lensflare
 Uranus moons Ariel, Umbriel, Oberon: https://planet-texture-maps.fandom.com/
 Titania: http://celestia.simulatorlabbs.com/CelSL/textures/medres/
 Starfield: https://svs.gsfc.nasa.gov/3572
+Comet Halley, Asteroid Pallas: https://3d-asteroids.space/

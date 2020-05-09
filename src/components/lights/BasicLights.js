@@ -1,7 +1,7 @@
 import { Group, SpotLight, AmbientLight, HemisphereLight, PointLight, TextureLoader, } from 'three';
 import {Lensflare, LensflareElement} from 'three/examples/jsm/objects/Lensflare';
 import lensflare0 from '../../img/lensflares/lensflare0.png'
-import lensflare1 from '../../img/lensflares/lensflare1.png'
+import lensflare3 from '../../img/lensflares/lensflare3.png'
 
 class BasicLights extends Group {
     constructor(...args) {
@@ -16,7 +16,7 @@ class BasicLights extends Group {
         let textureflare0 = new TextureLoader().load(lensflare0);
         // let textureflare1 = new TextureLoader().load('src/img/lensflares/lensflare1.png');
         // let textureflare2 = new TextureLoader().load('src/img/lensflares/lensflare2.png');
-        let textureflare3 = new TextureLoader().load(lensflare1);
+        let textureflare3 = new TextureLoader().load(lensflare3);
 
         lensflare.addElement(new LensflareElement(textureflare0, 256, 0));
         // lensflare.addElement(new LensflareElement(textureflare1, 256, 0.0));

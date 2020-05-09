@@ -1,5 +1,7 @@
 import { Group, SphereGeometry, MeshBasicMaterial, Mesh, Vector3, Matrix3, LineBasicMaterial, BufferGeometry, Line, TextureLoader, NearestFilter, MeshPhongMaterial, Vector2, Color, PlaneGeometry, DoubleSide, RingGeometry, Geometry, Face3, RingBufferGeometry, Texture, MeshLambertMaterial } from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
+import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader.js';
+import {MTLLoader } from 'three/examples/jsm/loaders/MTLLoader';
 import earthTexture from '../../../img/earth/Earth.png';
 import earthNormal from '../../../img/earth/Earth-normal-8k.png';
 import earthSpec from '../../../img/earth/EarthSpec.png';
@@ -36,7 +38,17 @@ import oberonTexture from '../../../img/uranus/moons/Oberonmap1.png';
 import titaniaTexture from '../../../img/uranus/moons/titania.jpg';
 import umbrielTexture from '../../../img/uranus/moons/Umbriel.png';
 import tritonTexture from '../../../img/neptune/triton.jpg';
-
+import plutoTexture from '../../../img/dwarf/pluto.jpg';
+import ceresTexture from '../../../img/dwarf/ceres.0center1.png';
+import ceresNormal from '../../../img/dwarf/ceres0centerNormal1.png';
+import erisTexture from '../../../img/dwarf/tenthplanet.jpg';
+import halleyModel from '../../../img/comets/Halley.obj';
+import haumeaModel from '../../../img/dwarf/Haumea_1_1000.glb';
+import makemakeTexture from '../../../img/dwarf/4k_makemake_fictional.jpg';
+import pallasModel from '../../../img/asteroids/Pallas.obj';
+import hygieaModel from '../../../img/asteroids/Hygiea Vernazza 2018.obj';
+import vestaModel from '../../../img/asteroids/Vesta_1_100.glb';
+import objTexture from '../../../img/comets/comet.jpg';
 
 
 class Body extends Group {
@@ -163,7 +175,7 @@ class Body extends Group {
                 this.loadModel(deimosModel, radius, {
                     // specular: new Color(0xB08060),
                     // color: new Color(0xB08060)
-                });
+                }, false, true);
                 break;
             case "phobos":
                 this.loadModel(phobosModel, radius, {
@@ -253,6 +265,52 @@ class Body extends Group {
                     shininess: 4,
                     specular: new Color(0x202020)
                 });
+                break;
+            
+            // dwarf planets
+            case "1 Ceres":
+                material = this.createPhongMaterial(ceresTexture, ceresNormal, undefined, {
+                    shininess: 4,
+                    specular: new Color(0x303030),
+                    normalScale: new Vector2(2, 2)
+                });
+                break;
+            case "136108 Haumea":
+                this.loadModel(haumeaModel, radius, {});
+                break;
+            case "136199 Eris":
+                material = this.createPhongMaterial(erisTexture, undefined, undefined, {
+                    shininess: 4,
+                    specular: new Color(0x202020)
+                });
+                break;
+            case "13672 Makemake":
+                material = this.createPhongMaterial(makemakeTexture, undefined, undefined, {
+                    shininess: 4,
+                    specular: new Color(0x111111)
+                });
+                break;
+            case "Pluto":
+                material = this.createPhongMaterial(plutoTexture, undefined, undefined, {
+                    shininess: 4,
+                    specular: new Color(0x202020)
+                });
+                break;
+
+            // asteroids
+            case "vesta":
+                this.loadModel(vestaModel, radius, undefined, false, true);
+                break;
+            case "pallas":
+                this.loadModel(pallasModel, radius, {}, true);
+                break;
+            case "hygiea":
+                this.loadModel(hygieaModel, radius, {}, true);
+                break;
+            
+            // comets
+            case "1P/Halley":
+                this.loadModel(halleyModel, radius, {}, true);
                 break;
         }
         
@@ -403,22 +461,43 @@ class Body extends Group {
         return ringGeometry;
     }
 
-    loadModel(file, radius, materialProps) {
+    loadModel(file, radius, materialProps, useObj) {
+        // if (debug) {
         if (materialProps == undefined) materialProps = {};
         this.isModel = true;
-        const loader = new GLTFLoader();
+        const loader = useObj ? new OBJLoader() : new GLTFLoader();
         const self = this;
         loader.load(file, function(gltf){
-            const model = gltf.scene.children[0];
+            // if (useObj)
+            //     debugger;
+            const model = gltf.scene == undefined ? gltf.children[0] :
+                gltf.scene.children[0].geometry ? gltf.scene.children[0] : gltf.scene.children[0].children[0];
+            if (useObj) {
+                // smooth the geometry
+                let geom = new Geometry().fromBufferGeometry(model.geometry);
+                geom.mergeVertices();
+                geom.computeVertexNormals();
+                model.geometry = new BufferGeometry().fromGeometry(geom);
+                model.geometry.computeBoundingSphere();
+                // model.geometry.computeBoundingBox();
+                // model.geometry.computeFaceNormals();
+                // model.geometry.computeMorphNormals();
+                // model.geometry.computeVertexNormals();
+                // model.material = new MeshPhongMaterial({
+                //     map: new TextureLoader().load(objTexture)
+                // });
+                model.material.map = new TextureLoader().load(objTexture);
+            }
             let modelRadius = model.geometry.boundingSphere.radius;
             const scaleFactor = radius / modelRadius;
             model.geometry.scale(scaleFactor, scaleFactor, scaleFactor);
             // model.material = new MeshPhongMaterial(materialProps);
-            for (let i in materialProps){
-                model.material[i] = materialProps[i];
-            }
+            // for (let i in materialProps){
+            //     model.material[i] = materialProps[i];
+            // }
             self.add(model);
         });
+        // }
     }
 
     getOrbitPosition(jd) {
