@@ -462,7 +462,6 @@ class Body extends Group {
     }
 
     loadModel(file, radius, materialProps, useObj) {
-        // if (debug) {
         if (materialProps == undefined) materialProps = {};
         this.isModel = true;
         const loader = useObj ? new OBJLoader() : new GLTFLoader();
@@ -474,18 +473,12 @@ class Body extends Group {
                 gltf.scene.children[0].geometry ? gltf.scene.children[0] : gltf.scene.children[0].children[0];
             if (useObj) {
                 // smooth the geometry
+                // https://discourse.threejs.org/t/solved-how-can-we-smooth-model-loaded-with-objloader-i-e-not-flat-shading/5531/7
                 let geom = new Geometry().fromBufferGeometry(model.geometry);
                 geom.mergeVertices();
                 geom.computeVertexNormals();
                 model.geometry = new BufferGeometry().fromGeometry(geom);
                 model.geometry.computeBoundingSphere();
-                // model.geometry.computeBoundingBox();
-                // model.geometry.computeFaceNormals();
-                // model.geometry.computeMorphNormals();
-                // model.geometry.computeVertexNormals();
-                // model.material = new MeshPhongMaterial({
-                //     map: new TextureLoader().load(objTexture)
-                // });
                 model.material.map = new TextureLoader().load(objTexture);
             }
             let modelRadius = model.geometry.boundingSphere.radius;
@@ -497,7 +490,6 @@ class Body extends Group {
             // }
             self.add(model);
         });
-        // }
     }
 
     getOrbitPosition(jd) {
