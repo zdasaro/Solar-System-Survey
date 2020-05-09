@@ -85,8 +85,8 @@ class SeedScene extends Scene {
             }
         }
         
-        const lights = new BasicLights(loadingManager);
-        this.add(/*sun, */lights, starfield);
+        this.lights = new BasicLights(loadingManager);
+        this.add(/*sun, */this.lights, starfield);
         // this.background = new Starfield().loadMap();
     }
 
@@ -323,6 +323,8 @@ class SeedScene extends Scene {
             }
         }
         this.prevTimestamp = timeStamp;
+
+        this.lights.updateLightSize();
     }
 }
 
