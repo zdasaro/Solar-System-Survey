@@ -24,11 +24,11 @@ loadingManager.onLoad = function() {
     document.getElementById( 'loading-screen' ).remove();
     document.body.style.margin = 0; // Removes margin around page
     document.body.style.overflow = 'hidden'; // Fix scrolling
-    document.body.appendChild(canvas);
+    document.body.appendChild(window.canvas);
     scene.addGUI();
 };
 
-const renderer = new WebGLRenderer({ antialias: true });
+const renderer = new WebGLRenderer({ antialias: true, preserveDrawingBuffer: true });
 const controls = new CustomControl();
 window.selectId = "Sol";
 window.focusId = "Sol";
@@ -40,8 +40,8 @@ scene.addCamera(window.cam);
 
 // Set up renderer, canvas, and minor CSS adjustments
 renderer.setPixelRatio(window.devicePixelRatio);
-const canvas = renderer.domElement;
-canvas.style.display = 'block'; // Removes padding below canvas
+window.canvas = renderer.domElement;
+window.canvas.style.display = 'block'; // Removes padding below canvas
 
 // Render loop
 const onAnimationFrameHandler = (timeStamp) => {

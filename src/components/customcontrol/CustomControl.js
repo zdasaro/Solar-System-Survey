@@ -11,8 +11,33 @@ class CustomControl extends Object {
 
     // Handle key presses
     handleKey(event) {
+        // focus on the selected object
         if (event.key === "f") {
             window.focusId = window.selectId;
+        }
+        // Take an image
+        else if (event.key === "i") {
+            try {
+                var dataURL = window.canvas.toDataURL();
+              } catch (err) {
+                alert("Sorry, your browser does not support capturing an image.");
+                return;
+              }
+            
+              // Create a download link and click it
+              let link = document.createElement('a');
+              let filename = prompt("Enter a filename:");
+              let ext = ".png"
+            
+              let suffix = "" + Math.round(Math.random() * 10000);
+              suffix = suffix.padStart(4, "0")
+              if (!filename) filename = `cloth-${suffix}`;
+            
+              if (!filename.endsWith(ext)) filename = filename + ext;
+            
+              link.download = filename;
+              link.href = dataURL;
+              link.click();
         }
     }
 
