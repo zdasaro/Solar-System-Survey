@@ -78,6 +78,7 @@ class Body extends Group {
                     normalScale: new Vector2(3, 3),
                     specular: new Color(0x262626)
                 });
+                geometry.rotateZ(-23.4 * Math.PI / 180);
                 break;
             case "mercury":
                 material = this.createPhongMaterial(mercuryTexture, undefined, undefined, {
@@ -295,6 +296,8 @@ class Body extends Group {
                     shininess: 4,
                     specular: new Color(0x202020)
                 });
+                geometry.rotateY(3.5);
+                geometry.rotateX(2.3);
                 break;
 
             // asteroids
