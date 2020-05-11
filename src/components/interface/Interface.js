@@ -1,11 +1,8 @@
+import loaderCSS from './loader.css';
+
 class Interface {
 
 	constructor() {
-
-        this.css = document.createElement("LINK");
-        this.css.rel = "stylesheet";
-        this.css.href = "src/components/interface/loader.css";
-        document.head.appendChild(this.css);
 
         this.loadingscreen = document.createElement("SECTION");
         this.loadingscreen.id = "loading-screen";

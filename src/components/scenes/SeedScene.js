@@ -3,6 +3,7 @@ import { Scene, Color, CubeTextureLoader, Vector3 } from 'three';
 import { Body, Starfield } from 'objects';
 import { BasicLights } from 'lights';
 import {Bodies} from '.';
+import { GuiElem } from '../interface';
 
 class SeedScene extends Scene {
     constructor(loadingManager) {
@@ -91,6 +92,8 @@ class SeedScene extends Scene {
     }
 
     addGUI() {
+        this.gui = new GuiElem();
+        this.gui.generateFolders(this.BODIES, this.state);
         this.state.gui =  new Dat.GUI(); // Create GUI for scene
         // Populate GUI
         var modifyGUI = this.state.gui.addFolder('Modifiable Values');
@@ -161,7 +164,8 @@ class SeedScene extends Scene {
     }
 
     update(timeStamp) {
-        const { SimulationDaystoSecond, pause, defaultUpdateList, defaultSleepList, showOrbitLines, selectObject } = this.state;
+        const { SimulationDaystoSecond, pause, defaultUpdateList, defaultSleepList, showOrbitLines/*, selectObject*/ } = this.state;
+        const selectObject = this.state.guiSelectObject;
         if (showOrbitLines && !this.prevOrbitLineToggle) {
             for (const obj of this.updateList) {
                 obj.toggleOrbitPathLine(showOrbitLines);
@@ -311,6 +315,7 @@ class SeedScene extends Scene {
 
         if (!pause || this.dateToJD()) {
             this.JDtoDate(this.simulationTime);
+            if (this.gui) this.gui.date(this.month, this.day, this.year);
             if (this.prevTimestamp == -1) {
                 this.simulationTime = 2451545 + timeStamp * (SimulationDaystoSecond / 1000.0);
                 this.prevTimestamp = timeStamp;

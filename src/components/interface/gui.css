@@ -1,0 +1,52 @@
+/* inspired by https://www.w3schools.com/howto/howto_js_treeview.asp */
+
+ul {
+    list-style-type: none;
+}
+
+#gui-pane {
+    position: absolute;
+    width: 15%;
+    display: block;
+    top: 0px;
+    left: 0px;
+    background-color: black;
+    color: #d0d0d0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    padding: 10px;
+}
+
+#folder-display {
+    padding: 0;
+}
+
+#folder-display li {
+    cursor: pointer;
+}
+
+.hidden {
+    display: none;
+}
+
+.visible {
+    display: block;
+}
+
+.collapsed {
+    user-select: none;
+}
+
+.collapsed::before {
+    content: "\25B6";
+    display: inline-block;
+    margin-right: 6px;
+    /*transition: 0.3s;*/
+}
+
+.expanded::before {
+    transform: rotate(90deg);
+}
+
+.selected {
+    font-weight: bold;
+}
