@@ -204,29 +204,43 @@ class SeedScene extends Scene {
 
         // camera
         if (this.prevFocus != window.focusId) {
-            if (window.focusId === "Sun") {
-                window.focusObj.remove(this.camera);
-                window.focusObj = this;
-                this.add(this.camera);
-                this.camera.position.clampLength(this.minZoom, this.maxZoom);
-                this.prevFocus = window.focusId;
+            if (window.focusId === "ReFocus") {
+                if (this.prevFocus === "Sun") {
+                    this.camera.position.setLength(45486261);
+                }
+                else {
+                    this.camera.position.setLength(window.focusObj.minZoom * 5);
+                }
+                /*let worldPos = new Vector3();
+                p.getWorldPosition(worldPos);
+                his.camera.lookAt(worldPos);*/
+                window.focusId = this.prevFocus;
             }
             else {
-                for (const p of this.updateList) {
-                    if (p.bodyid === window.focusId) {
-                        window.focusObj.remove(this.camera);
-                        window.focusObj = p;
-                        p.add(this.camera);
-                        this.camera.position.clampLength(p.minZoom, p.maxZoom);
-                        this.prevFocus = window.focusId;
-
-                        if (window.focusId === window.selectId) {
-                            this.camera.position.setLength(p.minZoom * 5);
-                            let worldPos = new Vector3();
-                            p.getWorldPosition(worldPos); // Note can be unstable when focused on an object orbiting another orbiting object (moons)
-                            this.camera.lookAt(worldPos);
+                if (window.focusId === "Sun") {
+                    window.focusObj.remove(this.camera);
+                    window.focusObj = this;
+                    this.add(this.camera);
+                    this.camera.position.clampLength(this.minZoom, this.maxZoom);
+                    this.prevFocus = window.focusId;
+                }
+                else {
+                    for (const p of this.updateList) {
+                        if (p.bodyid === window.focusId) {
+                            window.focusObj.remove(this.camera);
+                            window.focusObj = p;
+                            p.add(this.camera);
+                            this.camera.position.clampLength(p.minZoom, p.maxZoom);
+                            this.prevFocus = window.focusId;
+    
+                            if (window.focusId === window.selectId) {
+                                this.camera.position.setLength(p.minZoom * 5);
+                                let worldPos = new Vector3();
+                                p.getWorldPosition(worldPos);
+                                this.camera.lookAt(worldPos);
+                            }
+                            break;
                         }
-                        break;
                     }
                 }
             }

@@ -13,7 +13,12 @@ class CustomControl extends Object {
     handleKey(event) {
         // focus on the selected object
         if (event.key === "f") {
-            window.focusId = window.selectId;
+            if (window.focusId === window.selectId) {
+                window.focusId = "ReFocus";
+            }
+            else {
+                window.focusId = window.selectId;
+            }
         }
         // Take an image
         else if (event.key === "i") {
