@@ -14,6 +14,14 @@ ul {
     color: #d0d0d0;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     padding: 10px;
+    z-index: 2000;
+}
+
+#datgui-pane {
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    z-index: 1000;
 }
 
 #folder-display {

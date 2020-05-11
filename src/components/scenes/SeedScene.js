@@ -4,6 +4,7 @@ import { Body, Starfield } from 'objects';
 import { BasicLights } from 'lights';
 import {Bodies} from '.';
 import { GuiElem } from '../interface';
+import guiCSS from '../interface/gui.css';
 
 class SeedScene extends Scene {
     constructor(loadingManager) {
@@ -97,6 +98,10 @@ class SeedScene extends Scene {
         this.gui = new GuiElem();
         this.gui.generateFolders(this.BODIES, this.state);
         this.state.gui =  new Dat.GUI({width: 400}); // Create GUI for scene
+        let datGUIContainer = document.createElement('DIV');
+        datGUIContainer.id = "datgui-pane";
+        datGUIContainer.appendChild(this.state.gui.domElement);
+        document.body.appendChild(datGUIContainer);
         // Populate GUI
         this.state.ShowLabels = true;
         this.state.gui.add(this.state, 'SimulationDayToSeconds', -100, 100);
