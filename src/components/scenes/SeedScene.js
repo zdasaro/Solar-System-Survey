@@ -206,9 +206,6 @@ class SeedScene extends Scene {
                     if (b.type > 1) {
                         b.toggleOrbitPathLine(false);
                         b.parentBody.remove(b);
-                        if (window.focusId === b.bodyid) {
-                            window.focusId = selectObject;
-                        }
                     }
                     else if (b.type == 1) { // deload all moons of the same planet
                         let parentid = b.parentid;
@@ -217,9 +214,6 @@ class SeedScene extends Scene {
                             if (parentid === p.parentid) {
                                 p.toggleOrbitPathLine(false);
                                 p.parentBody.remove(p);
-                                if (window.focusId === p.bodyid) {
-                                    window.focusId = selectObject;
-                                }
                             }
                         }
                     }
@@ -230,9 +224,6 @@ class SeedScene extends Scene {
                             if (parentid === p.parentid) {
                                 p.toggleOrbitPathLine(false);
                                 b.remove(p);
-                                if (window.focusId === p.bodyid) {
-                                    window.focusId = selectObject;
-                                }
                             }
                         }
                     }
@@ -262,6 +253,8 @@ class SeedScene extends Scene {
                             }
                         }
                         found = true;
+                        window.focusId = "Sun";
+                        this.camera.position.setLength(b.a * b.auToWorldUnits * 2);
                         break;
                     }
                 }
@@ -288,6 +281,8 @@ class SeedScene extends Scene {
                                         }
                                     }
                                 }
+                                window.focusId = b.parent.bodyid;
+                                this.camera.position.setLength(b.a * b.auToWorldUnits * 2);
                             }
                             else {
                                 b.parentBody.add(b);
@@ -295,6 +290,8 @@ class SeedScene extends Scene {
                                 newUpdateList.push(b);
                                 b.toggleOrbitPathLine(ShowOrbitLines);
                                 b.selectThisObject(true);
+                                window.focusId = "Sun";
+                                this.camera.position.setLength(b.a * b.auToWorldUnits * 2);
                             }
 
                             found = true;
@@ -302,6 +299,11 @@ class SeedScene extends Scene {
                         }
                     }
                 }
+            }
+            else {
+                window.focusId = "Sun";
+                this.camera.position.set(42000000, 17000000, 4000000);
+                this.camera.lookAt(new Vector3(0, 0, 0));
             }
             this.updateList = newUpdateList;
         }
