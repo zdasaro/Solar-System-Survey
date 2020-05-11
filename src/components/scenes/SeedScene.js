@@ -215,6 +215,13 @@ class SeedScene extends Scene {
                         p.add(this.camera);
                         this.camera.position.clampLength(p.minZoom, p.maxZoom);
                         this.prevFocus = window.focusId;
+
+                        if (window.focusId === window.selectId) {
+                            this.camera.position.setLength(p.minZoom * 5);
+                            let worldPos = new Vector3();
+                            p.getWorldPosition(worldPos); // Note can be unstable when focused on an object orbiting another orbiting object (moons)
+                            this.camera.lookAt(worldPos);
+                        }
                         break;
                     }
                 }
