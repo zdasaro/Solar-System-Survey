@@ -41,7 +41,7 @@ class GuiElem {
         <ul>
             <li>Scroll to zoom in and out.</li>
             <li>Click and drag to rotate the view.</li>
-            <li>Use the arrow keys to pan the camera, and WASD to fly around, with a speed determined by the control Rocket Power.</li>
+            <li>Use the arrow keys to pan the camera, LK keys to spin the camera, and WASD to fly around, with a speed determined by the control Rocket Power.</li>
             <li>Select an object on the left panel to highlight its orbital path in red. Then press the F key to focus on that object.</li>
             <li>Press the I key to capture an image.</li>
             <li>The control pane on the right allows you to adjust several simulation parameters.</li>

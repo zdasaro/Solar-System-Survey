@@ -105,7 +105,7 @@ class SeedScene extends Scene {
         // Populate GUI
         this.state.ShowLabels = true;
         this.state.gui.add(this.state, 'SimulationDayToSeconds', -100, 100).name("Simulation Days Per Second");
-        this.state.gui.add(this.state, 'RocketPower', 1, 16).name("Rocket Power");
+        this.state.gui.add(this.state, 'RocketPower', 0.0, 15).name("Rocket Power");
         this.state.gui.add(this.state, 'Pause');
         this.state.gui.add(this.state, 'ShowOrbitLines').name("Show Orbit Lines");
         this.state.gui.add(this.state, "ShowLabels").name("Show Labels");
@@ -170,7 +170,41 @@ class SeedScene extends Scene {
         const { SimulationDayToSeconds, Pause, defaultUpdateList, defaultSleepList, ShowOrbitLines, ShowLabels, RocketPower } = this.state;
         const selectObject = this.state.guiSelectObject;
 
-        window.rocketPower = RocketPower;
+        let mov = Math.exp(RocketPower);
+
+        // Handle rocket controls
+        if (window.keyControls.w) {
+            this.camera.translateZ(-mov);
+        }
+        if (window.keyControls.s) {
+            this.camera.translateZ(mov);
+        }
+        if (window.keyControls.a) {
+            this.camera.translateX(-mov);
+        }
+        if (window.keyControls.d) {
+            this.camera.translateX(mov);
+        }
+        if (window.keyControls.up) {
+            this.camera.rotateX(0.02);
+        }
+        if (window.keyControls.down) {
+            this.camera.rotateX(-0.02);
+        }
+        if (window.keyControls.left) {
+            this.camera.rotateY(0.02);
+        }
+        if (window.keyControls.right) {
+            this.camera.rotateY(-0.02);
+        }
+        if (window.keyControls.spinleft) {
+            this.camera.rotateZ(0.02);
+        }
+        if (window.keyControls.spinright) {
+            this.camera.rotateZ(-0.02);
+        }
+        this.camera.position.clampLength(window.focusObj.minZoom, window.focusObj.maxZoom);
+
         if (ShowOrbitLines && !this.prevOrbitLineToggle) {
             for (const obj of this.updateList) {
                 obj.toggleOrbitPathLine(ShowOrbitLines);
@@ -203,29 +237,40 @@ class SeedScene extends Scene {
 
         // camera
         if (this.prevFocus != window.focusId) {
-            if (window.focusId === "Sun") {
-                window.focusObj.remove(this.camera);
-                window.focusObj = this;
-                this.add(this.camera);
-                this.camera.position.clampLength(this.minZoom, this.maxZoom);
-                this.prevFocus = window.focusId;
+            if (window.focusId === "ReFocus") {
+                if (this.prevFocus === "Sun") {
+                    this.camera.position.setLength(45486261);
+                }
+                else {
+                    this.camera.position.setLength(window.focusObj.minZoom * 5);
+                }
+                window.focusId = this.prevFocus;
             }
             else {
-                for (const p of this.updateList) {
-                    if (p.bodyid === window.focusId) {
-                        window.focusObj.remove(this.camera);
-                        window.focusObj = p;
-                        p.add(this.camera);
-                        this.camera.position.clampLength(p.minZoom, p.maxZoom);
-                        this.prevFocus = window.focusId;
-
-                        if (window.focusId === window.selectId) {
-                            this.camera.position.setLength(p.minZoom * 5);
-                            let worldPos = new Vector3();
-                            p.getWorldPosition(worldPos); // Note can be unstable when focused on an object orbiting another orbiting object (moons)
-                            this.camera.lookAt(worldPos);
+                if (window.focusId === "Sun") {
+                    window.focusObj.remove(this.camera);
+                    window.focusObj = this;
+                    this.add(this.camera);
+                    this.camera.position.clampLength(this.minZoom, this.maxZoom);
+                    this.prevFocus = window.focusId;
+                }
+                else {
+                    for (const p of this.updateList) {
+                        if (p.bodyid === window.focusId) {
+                            window.focusObj.remove(this.camera);
+                            window.focusObj = p;
+                            p.add(this.camera);
+                            this.camera.position.clampLength(p.minZoom, p.maxZoom);
+                            this.prevFocus = window.focusId;
+    
+                            if (window.focusId === window.selectId) {
+                                this.camera.position.setLength(p.minZoom * 5);
+                                let worldPos = new Vector3();
+                                p.getWorldPosition(worldPos);
+                                this.camera.lookAt(worldPos);
+                            }
+                            break;
                         }
-                        break;
                     }
                 }
             }
