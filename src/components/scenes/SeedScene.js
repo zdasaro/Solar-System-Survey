@@ -32,6 +32,7 @@ class SeedScene extends Scene {
         // Set background to a nice color
         this.background = new Color(0x000000);
         this.prevOrbitLineToggle = false;
+        this.prevTextToggle = false;
         
         // this.background = new CubeTextureLoader().setPath('src/img/star_cubemap/')
         // .load([
@@ -183,6 +184,13 @@ class SeedScene extends Scene {
                     obj.toggleTextLabel(true);
                 }
             }
+            this.prevTextToggle = true;
+        }
+        else if (this.prevTextToggle) {
+            for (const obj of this.updateList) {
+                obj.toggleTextLabel(false);
+            }
+            this.prevTextToggle = false;
         }
 
         // camera
