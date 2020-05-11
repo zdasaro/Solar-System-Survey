@@ -339,6 +339,9 @@ class SeedScene extends Scene {
                         }
                     }
                 }
+                let worldPos = new Vector3();
+                window.focusObj.getWorldPosition(worldPos);
+                this.camera.lookAt(worldPos);
             }
             else {
                 window.focusId = "Sun";

@@ -39,6 +39,18 @@ class CustomControl extends Object {
               link.href = dataURL;
               link.click();
         }
+        else if (event.key === "ArrowUp") {
+            window.cam.rotateX(0.1);
+        }
+        else if (event.key === "ArrowDown") {
+            window.cam.rotateX(-0.1);
+        }
+        else if (event.key === "ArrowLeft") {
+            window.cam.rotateY(0.1);
+        }
+        else if (event.key === "ArrowRight") {
+            window.cam.rotateY(-0.1);
+        }
     }
 
     // Code based off of: https://andreasrohner.at/posts/Web%20Development/JavaScript/Simple-orbital-camera-controls-for-THREE-js/

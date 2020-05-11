@@ -344,7 +344,7 @@ class Body extends Group {
         this.m = degToRad(parameters.m); // mean anomaly at J2000
         this.bodyid = parameters.id; // body name
 
-        this.minZoom = radius * 1.3;
+        this.minZoom = radius * 1.0;
         this.maxZoom = 70000000;
 
         // Calculate Equatorial Position Vector 
