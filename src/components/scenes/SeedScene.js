@@ -15,10 +15,10 @@ class SeedScene extends Scene {
 
         // Init state
         this.state = {
-            SimulationDaystoSecond: 10,
-            pause: false,
-            showOrbitLines: true,
-            selectObject: "Sol",
+            SimulationDayToSeconds: 10,
+            Pause: false,
+            ShowOrbitLines: true,
+            selectObject: "Sun",
             defaultUpdateList: [],
             defaultSleepList: [] // bodies not loaded
         };
@@ -48,16 +48,16 @@ class SeedScene extends Scene {
         this.monthArray = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
         // Time menu modification
-        this.modYear = 2000;
-        this.modMonth = 'Jan';
-        this.modDay = 1;
+        this.SetYear = 2000;
+        this.SetMonth = 'Jan';
+        this.SetDay = 1;
         this.prevYear = 2000;
         this.prevMonth = 'Jan';
         this.prevDay = 1;
 
         // Add meshes to scene
-        this.prevFocus = "Sol";
-        this.bodyIDs = ["Sol"];
+        this.prevFocus = "Sun";
+        this.bodyIDs = ["Sun"];
         // sun
         // const sun = new Sun();
         const starfield = new Starfield(loadingManager);
@@ -94,21 +94,14 @@ class SeedScene extends Scene {
     addGUI() {
         this.gui = new GuiElem();
         this.gui.generateFolders(this.BODIES, this.state);
-        this.state.gui =  new Dat.GUI(); // Create GUI for scene
+        this.state.gui =  new Dat.GUI({width: 400}); // Create GUI for scene
         // Populate GUI
-        var modifyGUI = this.state.gui.addFolder('Modifiable Values');
-        modifyGUI.add(this.state, 'SimulationDaystoSecond', -100, 100);
-        modifyGUI.add(this.state, 'pause');
-        modifyGUI.add(this.state, 'showOrbitLines');
-        modifyGUI.add(this.state, 'selectObject', this.bodyIDs);
-        modifyGUI.add(this, 'modYear');
-        modifyGUI.add(this, 'modMonth', this.monthArray);
-        modifyGUI.add(this, 'modDay');
-
-        var readOnlyGUI = this.state.gui.addFolder('Read Only Values (Do NOT Change)');
-        readOnlyGUI.add(this, 'year').listen();
-        readOnlyGUI.add(this, 'month').listen();
-        readOnlyGUI.add(this, 'day').listen();
+        this.state.gui.add(this.state, 'SimulationDayToSeconds', -100, 100);
+        this.state.gui.add(this.state, 'Pause');
+        this.state.gui.add(this.state, 'ShowOrbitLines');
+        this.state.gui.add(this, 'SetYear');
+        this.state.gui.add(this, 'SetMonth', this.monthArray);
+        this.state.gui.add(this, 'SetDay');
     }
 
     addCamera(camera) {
@@ -150,37 +143,37 @@ class SeedScene extends Scene {
 
     // If GUI has updated the mod times, update simulation time (JD) to match
     dateToJD() {
-        if (this.prevYear != this.modYear || this.prevMonth != this.modMonth || this.prevDay != this.modDay) {
-            this.prevYear = this.modYear;
-            this.prevMonth = this.modMonth;
-            this.prevDay = this.modDay;
+        if (this.prevYear != this.SetYear || this.prevMonth != this.SetMonth || this.prevDay != this.SetDay) {
+            this.prevYear = this.SetYear;
+            this.prevMonth = this.SetMonth;
+            this.prevDay = this.SetDay;
 
-            let monthNumber = this.monthArray.indexOf(this.modMonth) + 1;
+            let monthNumber = this.monthArray.indexOf(this.SetMonth) + 1;
             // Sets time to UTC 12:00 of this day
-            this.simulationTime = 367 * this.modYear - Math.floor(7 * (this.modYear + Math.floor((monthNumber + 9) / 12.0)) / 4) + Math.floor(275 * monthNumber / 9) + this.modDay + 1721014;
+            this.simulationTime = 367 * this.SetYear - Math.floor(7 * (this.SetYear + Math.floor((monthNumber + 9) / 12.0)) / 4) + Math.floor(275 * monthNumber / 9) + this.SetDay + 1721014;
             return true;
         }
         return false;
     }
 
     update(timeStamp) {
-        const { SimulationDaystoSecond, pause, defaultUpdateList, defaultSleepList, showOrbitLines/*, selectObject*/ } = this.state;
+        const { SimulationDayToSeconds, Pause, defaultUpdateList, defaultSleepList, ShowOrbitLines/*, selectObject*/ } = this.state;
         const selectObject = this.state.guiSelectObject;
-        if (showOrbitLines && !this.prevOrbitLineToggle) {
+        if (ShowOrbitLines && !this.prevOrbitLineToggle) {
             for (const obj of this.updateList) {
-                obj.toggleOrbitPathLine(showOrbitLines);
+                obj.toggleOrbitPathLine(ShowOrbitLines);
             }
         }
-        else if (!showOrbitLines && this.prevOrbitLineToggle) {
+        else if (!ShowOrbitLines && this.prevOrbitLineToggle) {
             for (const obj of this.updateList) {
-                obj.toggleOrbitPathLine(showOrbitLines);
+                obj.toggleOrbitPathLine(ShowOrbitLines);
             }
         }
-        this.prevOrbitLineToggle = showOrbitLines;
+        this.prevOrbitLineToggle = ShowOrbitLines;
 
         // camera
         if (this.prevFocus != window.focusId) {
-            if (window.focusId === "Sol") {
+            if (window.focusId === "Sun") {
                 window.focusObj.remove(this.camera);
                 window.focusObj = this;
                 this.add(this.camera);
@@ -252,7 +245,7 @@ class SeedScene extends Scene {
             // Add to focus list, turn orbit lines to red, add to updatelist, take off of sleep list
             let newUpdateList = defaultUpdateList.slice();
 
-            if (selectObject != "Sol") {
+            if (selectObject != "Sun") {
                 // Should be a planet if in this list. Load moons
                 let found = false;
                 for (const b of defaultUpdateList) {
@@ -265,7 +258,7 @@ class SeedScene extends Scene {
                                 b.add(p);
                                 p.update(this.simulationTime);
                                 newUpdateList.push(p);
-                                p.toggleOrbitPathLine(showOrbitLines);
+                                p.toggleOrbitPathLine(ShowOrbitLines);
                             }
                         }
                         found = true;
@@ -289,7 +282,7 @@ class SeedScene extends Scene {
                                         b.parentBody.add(p);
                                         p.update(this.simulationTime);
                                         newUpdateList.push(p);
-                                        p.toggleOrbitPathLine(showOrbitLines);
+                                        p.toggleOrbitPathLine(ShowOrbitLines);
                                         if (p.bodyid === b.bodyid) {
                                             p.selectThisObject(true);
                                         }
@@ -300,7 +293,7 @@ class SeedScene extends Scene {
                                 b.parentBody.add(b);
                                 b.update(this.simulationTime);
                                 newUpdateList.push(b);
-                                b.toggleOrbitPathLine(showOrbitLines);
+                                b.toggleOrbitPathLine(ShowOrbitLines);
                                 b.selectThisObject(true);
                             }
 
@@ -313,14 +306,14 @@ class SeedScene extends Scene {
             this.updateList = newUpdateList;
         }
 
-        if (!pause || this.dateToJD()) {
+        if (!Pause || this.dateToJD()) {
             this.JDtoDate(this.simulationTime);
             if (this.gui) this.gui.date(this.month, this.day, this.year);
             if (this.prevTimestamp == -1) {
-                this.simulationTime = 2451545 + timeStamp * (SimulationDaystoSecond / 1000.0);
+                this.simulationTime = 2451545 + timeStamp * (SimulationDayToSeconds / 1000.0);
                 this.prevTimestamp = timeStamp;
             }
-            this.simulationTime = this.simulationTime + (timeStamp - this.prevTimestamp) * (SimulationDaystoSecond / 1000.0);
+            this.simulationTime = this.simulationTime + (timeStamp - this.prevTimestamp) * (SimulationDayToSeconds / 1000.0);
     
             // Call update for each object in the updateList
             for (const obj of this.updateList) {

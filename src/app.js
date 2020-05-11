@@ -30,8 +30,8 @@ loadingManager.onLoad = function() {
 
 const renderer = new WebGLRenderer({ antialias: true, preserveDrawingBuffer: true, logarithmicDepthBuffer: true });
 const controls = new CustomControl();
-window.selectId = "Sol";
-window.focusId = "Sol";
+window.selectId = "Sun";
+window.focusId = "Sun";
 window.focusObj = scene;
 window.cam = new PerspectiveCamera(undefined, undefined, 0.001, 150000000);
 window.cam.position.set(42000000, 17000000, 4000000);

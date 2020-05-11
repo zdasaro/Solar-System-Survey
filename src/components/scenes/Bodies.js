@@ -33,7 +33,7 @@ class Bodies extends Object {
                 "m": 50.115
             },
             {
-                "id": "terra",
+                "id": "earth",
                 "type": 0,
                 "parent": -1,
                 "parentMass": 1,
@@ -119,7 +119,7 @@ class Bodies extends Object {
             },
             // EARTH'S MOON
             {
-                "id": "luna",
+                "id": "moon",
                 "type": 1,
                 "parent": 2,
                 "parentMass": 3.003963e-6,

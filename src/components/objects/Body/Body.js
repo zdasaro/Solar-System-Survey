@@ -72,7 +72,7 @@ class Body extends Group {
         this.isModel = false;
         switch (parameters.id) {
             // planets
-            case "terra":
+            case "earth":
                 material = this.createPhongMaterial(earthTexture, earthNormal,
                 earthSpec, {
                     normalScale: new Vector2(3, 3),
@@ -139,7 +139,7 @@ class Body extends Group {
                 break;
             /////// moons
             // earth moon
-            case "luna":
+            case "moon":
                 material = this.createPhongMaterial(earthMoonTexture, earthMoonNormal, undefined, {
                     shininess: 4,
                     specular: new Color(0x333333)

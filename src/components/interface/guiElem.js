@@ -37,12 +37,12 @@ class GuiElem {
     //         displayName: "Moons",
     //         list: [
     //             {
-    //                 id: "terra",
-    //                 displayName: "terra",
+    //                 id: "earth",
+    //                 displayName: "earth",
     //                 list: [
     //                     {
-    //                         id: "luna",
-    //                         displayName: "luna"
+    //                         id: "moon",
+    //                         displayName: "moon"
     //                     }
     //                 ]
     //             },
@@ -92,6 +92,7 @@ class GuiElem {
     }
 
     generateFolderDisplay() {
+        this.addListItem({id: "Sun", displayName: "Sun"}, this.folderDisplay);
         for (let i = 0; i < this.folders.length; i++) {
             let folder = this.folders[i];
             this.addListItem(folder, this.folderDisplay);
