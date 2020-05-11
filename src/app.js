@@ -38,6 +38,7 @@ document.body.appendChild( labelRenderer.domElement );
 const controls = new CustomControl();
 window.selectId = "Sun";
 window.focusId = "Sun";
+window.rocketPower = 10;
 window.focusObj = scene;
 window.cam = new PerspectiveCamera(undefined, undefined, 0.001, 150000000);
 window.cam.position.set(42000000, 17000000, 4000000);

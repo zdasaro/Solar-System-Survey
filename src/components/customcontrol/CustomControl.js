@@ -51,6 +51,28 @@ class CustomControl extends Object {
         else if (event.key === "ArrowRight") {
             window.cam.rotateY(-0.1);
         }
+        else if (event.key === "w") {
+            let mov = new Vector3();
+            window.cam.getWorldDirection(mov);
+            window.cam.position.addScaledVector(mov.normalize(), Math.exp(window.rocketPower));
+        }
+        else if (event.key === "s") {
+            let mov = new Vector3();
+            window.cam.getWorldDirection(mov);
+            window.cam.position.addScaledVector(mov.normalize(), -Math.exp(window.rocketPower));
+        }
+        else if (event.key === "a") {
+            let mov = new Vector3();
+            window.cam.getWorldDirection(mov);
+            let movSide = new Vector3(mov.y, -mov.z, -mov.x);
+            window.cam.position.addScaledVector(movSide.normalize(), Math.exp(window.rocketPower));
+        }
+        else if (event.key === "d") {
+            let mov = new Vector3();
+            window.cam.getWorldDirection(mov);
+            let movSide = new Vector3(mov.y, -mov.z, -mov.x);
+            window.cam.position.addScaledVector(movSide.normalize(), -Math.exp(window.rocketPower));
+        }
     }
 
     // Code based off of: https://andreasrohner.at/posts/Web%20Development/JavaScript/Simple-orbital-camera-controls-for-THREE-js/

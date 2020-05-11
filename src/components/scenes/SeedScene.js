@@ -17,6 +17,7 @@ class SeedScene extends Scene {
         // Init state
         this.state = {
             SimulationDayToSeconds: 10,
+            RocketPower: 10,
             Pause: false,
             ShowOrbitLines: true,
             ShowLabels: false,
@@ -105,6 +106,7 @@ class SeedScene extends Scene {
         // Populate GUI
         this.state.ShowLabels = true;
         this.state.gui.add(this.state, 'SimulationDayToSeconds', -100, 100);
+        this.state.gui.add(this.state, 'RocketPower', 1, 16);
         this.state.gui.add(this.state, 'Pause');
         this.state.gui.add(this.state, 'ShowOrbitLines');
         this.state.gui.add(this.state, "ShowLabels");
@@ -166,8 +168,10 @@ class SeedScene extends Scene {
     }
 
     update(timeStamp) {
-        const { SimulationDayToSeconds, Pause, defaultUpdateList, defaultSleepList, ShowOrbitLines, ShowLabels/*, selectObject*/ } = this.state;
+        const { SimulationDayToSeconds, Pause, defaultUpdateList, defaultSleepList, ShowOrbitLines, ShowLabels, RocketPower } = this.state;
         const selectObject = this.state.guiSelectObject;
+
+        window.rocketPower = RocketPower;
         if (ShowOrbitLines && !this.prevOrbitLineToggle) {
             for (const obj of this.updateList) {
                 obj.toggleOrbitPathLine(ShowOrbitLines);
