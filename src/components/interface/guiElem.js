@@ -12,7 +12,7 @@ class GuiElem {
         document.body.appendChild(this.gui);
         this.folders = [];
         this.folders[PLANET] = {displayName: "Planets", list: []};
-        this.folders[MOON] = {displayName: "Moons", list: []};
+        this.folders[MOON] = {displayName: "Moons of...", list: []};
         this.folders[DWARF] = {displayName: "Dwarf Planets", list: []};
         this.folders[ASTEROID] = {displayName: "Asteroids", list: []};
         this.folders[COMET] = {displayName: "Comets", list: []};
@@ -67,10 +67,11 @@ class GuiElem {
         this.state = state;
         for (let i = 0; i < bodyList.length; i++) {
             const body = bodyList[i];
+            const displayName = body.displayName ? body.displayName : this.capitalize(body.id);
             if (body.type === PLANET) {
                 this.folders[MOON].list.push({
                     id: body.id,
-                    displayName: body.displayName ? body.displayName : body.id,
+                    displayName: displayName,
                     list: []
                 });
             }
@@ -79,12 +80,12 @@ class GuiElem {
                 let planet = this.findPlanet(body.parent, bodyList);
                 planet.list.push({
                     id: body.id,
-                    displayName: body.displayName ? body.displayName : body.id
+                    displayName: displayName
                 });
             } else {
                 this.folders[body.type].list.push({
                     id: body.id,
-                    displayName: body.displayName ? body.displayName : body.id
+                    displayName: displayName
                 });
             }
         }
@@ -96,21 +97,6 @@ class GuiElem {
         for (let i = 0; i < this.folders.length; i++) {
             let folder = this.folders[i];
             this.addListItem(folder, this.folderDisplay);
-            // let li = document.createElement("LI");
-            // // li.classList.add("folder-head");
-            // let title = document.createElement("SPAN");
-            // title.classList.add("folder-title");
-            // title.innerHTML = folder.displayName;
-            // li.appendChild(title);
-            // let ul = document.createElement("UL");
-            // ul.classList.add("hidden");
-            // for (let body of folder.list) {
-            //     this.addListItem(body, ul);
-            // }
-
-            // li.appendChild(ul);
-
-            // this.folderDisplay.appendChild(li);
         }
     }
 
@@ -127,6 +113,7 @@ class GuiElem {
             label.addEventListener("click", function() {
                 this.parentElement.querySelector('.hidden').classList.toggle("visible");
                 this.classList.toggle("expanded");
+
             });
             label.classList.add("folder-title");
             // create nested list
@@ -142,12 +129,14 @@ class GuiElem {
             label.addEventListener("click", function() {
                 if (self.selected) self.selected.classList.remove("selected");
                 self.selected = this;
-                // self.selectObject(body.id);
                 self.state.guiSelectObject = body.id;
-                // console.log(self.selectObject);
                 this.classList.add("selected");
             })
         }
+    }
+
+    capitalize(name) {
+        return name.substring(0,1).toUpperCase()+name.substring(1);
     }
 }
 
