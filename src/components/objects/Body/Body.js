@@ -408,7 +408,7 @@ class Body extends Group {
             this.orbitPositions.push(this.eqPosition(i * this.lengthTimeSlice).multiplyScalar(this.auToWorldUnits))
         }
 
-        let orbitPathLineMaterial = new LineBasicMaterial({color: 0xffffff});
+        let orbitPathLineMaterial = new LineBasicMaterial({color: 0xffffff, depthWrite: false});
         let orbitPathLineGeo = new BufferGeometry().setFromPoints(this.orbitPositions);
         this.orbitPathLine = new Line(orbitPathLineGeo, orbitPathLineMaterial);
         this.internalOrbitPathToggle = false;
