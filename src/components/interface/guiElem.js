@@ -204,13 +204,39 @@ class GuiElem {
         }
         else {
             const self = this;
+            body.domElement = label;
             label.addEventListener("click", function() {
-                if (self.selected) self.selected.classList.remove("selected");
-                self.selected = this;
-                self.state.guiSelectObject = body.id;
-                self.info(body);
-                this.classList.add("selected");
-            })
+                self.select(body);
+            });
+        }
+    }
+
+    searchById(id, list) {
+        if (list === undefined) list = this.folders;
+        for (let body of list) {
+            // if it has a list, search the list. if not, check the id.
+            if (body.list) {
+                const result = this.searchById(id, body.list);
+                if (result) return result;
+            } else if (body.id) {
+                if (body.id === id) return body;
+            }
+        }
+        return undefined;
+    }
+
+    select(body) {
+        if (this.selected) this.selected.classList.remove("selected");
+        this.selected = body.domElement;
+        this.state.guiSelectObject = body.id;
+        this.info(body);
+        body.domElement.classList.add("selected");
+    }
+
+    selectById(id) {
+        const body = this.searchById(id);
+        if (body) {
+            this.select(body)
         }
     }
 

@@ -1,5 +1,5 @@
 import * as Dat from 'dat.gui';
-import { Scene, Color, CubeTextureLoader, Vector3 } from 'three';
+import { Scene, Color, Vector3 } from 'three';
 import { Body, Starfield } from 'objects';
 import { BasicLights } from 'lights';
 import {Bodies} from '.';
@@ -65,7 +65,6 @@ class SeedScene extends Scene {
         // sun
         // const sun = new Sun();
         const starfield = new Starfield(loadingManager);
-        //const flower = new Flower(this);
         for (let i = 0; i < this.BODIES.length; i++) {
             this.bodyIDs.push(this.BODIES[i].id);
 

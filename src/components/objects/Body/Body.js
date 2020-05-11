@@ -66,7 +66,8 @@ class Body extends Group {
         }
 
         this.type = parameters.type; // 0 for planet, 1 for moon, 2 for dwarf planet, 3 for asteroid, 4 for comet
-        
+        this.scene = scene;
+
         const geometry = new SphereGeometry(radius,32,32);
         let material = new MeshBasicMaterial({color: 0xffff00}); // placeholder
         let addons = []; // additional geometries (rings or clouds) to add to the planet
@@ -422,6 +423,11 @@ class Body extends Group {
         textDiv.style.fontFamily = "Segoe UI,Tahoma,Geneva,Verdana,sans-serif";
         textDiv.style.userSelect = "none";
         textDiv.style.zIndex = 0;
+        textDiv.style.cursor = "pointer";
+        const self = this;
+        textDiv.addEventListener("click", function(event) {
+            self.scene.gui.selectById(self.bodyid);
+        })
         this.textLabel = new CSS2DObject(textDiv);
         this.textLabel.position.set(0, radius, 0);
         this.internalTextToggle = false;
