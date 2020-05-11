@@ -9,6 +9,8 @@ class GuiElem {
         
         this.dateElem = document.createElement("DIV");
         this.gui.appendChild(this.dateElem);
+        this.infoElem = document.createElement("DIV");
+        this.gui.appendChild(this.infoElem);
         document.body.appendChild(this.gui);
         this.folders = [];
         this.folders[PLANET] = {displayName: "Planets", list: []};
@@ -52,6 +54,31 @@ class GuiElem {
     //     ...
     // ]
 
+    info(body) {
+        if (body.displayName === "Sun") {
+            this.infoElem.innerHTML = "";
+            return;
+        }
+        let type;
+        if (body.type === PLANET) {
+            type = "Planet";
+        }
+        else if (body.type === MOON) {
+            type = "Moon";
+        }
+        else if (body.type === DWARF) {
+            type = "Dwarf Planet";
+        }
+        else if (body.type === ASTEROID) {
+            type = "Asteroid";
+        }
+        else {
+            type = "Comet";
+        }
+        this.infoElem.innerHTML = "<br>" + body.displayName + "<br>" + type + "<br>Radius: " + body.radius + " KM<br> Semi-Major Axis: " + 
+        body.a + " AU<br>Eccentricity: " + body.e + "<br>Inclination: " + body.i + " DEG<br>Long Asc Node: " + body.o + " DEG<br>Arg of Periapsis: " + body.w + "DEG";
+    }
+
     date(month, day, year) {
         this.dateElem.innerHTML = month + " " + day + ", " + year;
     }
@@ -80,12 +107,26 @@ class GuiElem {
                 let planet = this.findPlanet(body.parent, bodyList);
                 planet.list.push({
                     id: body.id,
-                    displayName: displayName
+                    displayName: displayName,
+                    type: body.type,
+                    radius: body.radius,
+                    a: body.a,
+                    e: body.e,
+                    i: body.i,
+                    o: body.o,
+                    w: body.w
                 });
             } else {
                 this.folders[body.type].list.push({
                     id: body.id,
-                    displayName: displayName
+                    displayName: displayName,
+                    type: body.type,
+                    radius: body.radius,
+                    a: body.a,
+                    e: body.e,
+                    i: body.i,
+                    o: body.o,
+                    w: body.w
                 });
             }
         }
@@ -130,6 +171,7 @@ class GuiElem {
                 if (self.selected) self.selected.classList.remove("selected");
                 self.selected = this;
                 self.state.guiSelectObject = body.id;
+                self.info(body);
                 this.classList.add("selected");
             })
         }
