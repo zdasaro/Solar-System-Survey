@@ -106,7 +106,7 @@ class SeedScene extends Scene {
         // Populate GUI
         this.state.ShowLabels = true;
         this.state.gui.add(this.state, 'SimulationDayToSeconds', -100, 100).name("Simulation Days Per Second");
-        this.state.gui.add(this.state, 'RocketPower', 1, 16).name("Rocket Power");
+        this.state.gui.add(this.state, 'RocketPower', 0.0, 15).name("Rocket Power");
         this.state.gui.add(this.state, 'Pause');
         this.state.gui.add(this.state, 'ShowOrbitLines').name("Show Orbit Lines");
         this.state.gui.add(this.state, "ShowLabels").name("Show Labels");
@@ -171,7 +171,41 @@ class SeedScene extends Scene {
         const { SimulationDayToSeconds, Pause, defaultUpdateList, defaultSleepList, ShowOrbitLines, ShowLabels, RocketPower } = this.state;
         const selectObject = this.state.guiSelectObject;
 
-        window.rocketPower = RocketPower;
+        let mov = Math.exp(RocketPower);
+
+        // Handle rocket controls
+        if (window.keyControls.w) {
+            this.camera.translateZ(-mov);
+        }
+        if (window.keyControls.s) {
+            this.camera.translateZ(mov);
+        }
+        if (window.keyControls.a) {
+            this.camera.translateX(-mov);
+        }
+        if (window.keyControls.d) {
+            this.camera.translateX(mov);
+        }
+        if (window.keyControls.up) {
+            this.camera.rotateX(0.02);
+        }
+        if (window.keyControls.down) {
+            this.camera.rotateX(-0.02);
+        }
+        if (window.keyControls.left) {
+            this.camera.rotateY(0.02);
+        }
+        if (window.keyControls.right) {
+            this.camera.rotateY(-0.02);
+        }
+        if (window.keyControls.spinleft) {
+            this.camera.rotateZ(0.02);
+        }
+        if (window.keyControls.spinright) {
+            this.camera.rotateZ(-0.02);
+        }
+        this.camera.position.clampLength(window.focusObj.minZoom, window.focusObj.maxZoom);
+
         if (ShowOrbitLines && !this.prevOrbitLineToggle) {
             for (const obj of this.updateList) {
                 obj.toggleOrbitPathLine(ShowOrbitLines);
@@ -211,9 +245,6 @@ class SeedScene extends Scene {
                 else {
                     this.camera.position.setLength(window.focusObj.minZoom * 5);
                 }
-                /*let worldPos = new Vector3();
-                p.getWorldPosition(worldPos);
-                his.camera.lookAt(worldPos);*/
                 window.focusId = this.prevFocus;
             }
             else {

@@ -7,6 +7,41 @@ class CustomControl extends Object {
         window.addEventListener("mousemove", this.handleDrag);
         window.addEventListener("wheel", this.handleZoom);
         window.addEventListener("keydown", this.handleKey);
+        window.addEventListener("keyup", this.handleKeyUp);
+    }
+
+    // Handle key release
+    handleKeyUp(event) {
+        if (event.key === "ArrowUp") {
+            window.keyControls.up = false;
+        }
+        else if (event.key === "ArrowDown") {
+            window.keyControls.down = false;
+        }
+        else if (event.key === "ArrowLeft") {
+            window.keyControls.left = false;
+        }
+        else if (event.key === "ArrowRight") {
+            window.keyControls.right = false;
+        }
+        else if (event.key === "k") {
+            window.keyControls.spinleft = false;
+        }
+        else if (event.key === "l") {
+            window.keyControls.spinright = false;
+        }
+        else if (event.key === "w") {
+            window.keyControls.w = false;
+        }
+        else if (event.key === "s") {
+            window.keyControls.s = false;
+        }
+        else if (event.key === "a") {
+            window.keyControls.a = false;
+        }
+        else if (event.key === "d") {
+            window.keyControls.d = false;
+        }
     }
 
     // Handle key presses
@@ -45,38 +80,34 @@ class CustomControl extends Object {
               link.click();
         }
         else if (event.key === "ArrowUp") {
-            window.cam.rotateX(0.1);
+            window.keyControls.up = true;
         }
         else if (event.key === "ArrowDown") {
-            window.cam.rotateX(-0.1);
+            window.keyControls.down = true;
         }
         else if (event.key === "ArrowLeft") {
-            window.cam.rotateY(0.1);
+            window.keyControls.left = true;
         }
         else if (event.key === "ArrowRight") {
-            window.cam.rotateY(-0.1);
+            window.keyControls.right = true;
+        }
+        else if (event.key === "k") {
+            window.keyControls.spinleft = true;
+        }
+        else if (event.key === "l") {
+            window.keyControls.spinright = true;
         }
         else if (event.key === "w") {
-            let mov = new Vector3();
-            window.cam.getWorldDirection(mov);
-            window.cam.position.addScaledVector(mov.normalize(), Math.exp(window.rocketPower));
+            window.keyControls.w = true;
         }
         else if (event.key === "s") {
-            let mov = new Vector3();
-            window.cam.getWorldDirection(mov);
-            window.cam.position.addScaledVector(mov.normalize(), -Math.exp(window.rocketPower));
+            window.keyControls.s = true;
         }
         else if (event.key === "a") {
-            let mov = new Vector3();
-            window.cam.getWorldDirection(mov);
-            let movSide = new Vector3(mov.y, -mov.z, -mov.x);
-            window.cam.position.addScaledVector(movSide.normalize(), Math.exp(window.rocketPower));
+            window.keyControls.a = true;
         }
         else if (event.key === "d") {
-            let mov = new Vector3();
-            window.cam.getWorldDirection(mov);
-            let movSide = new Vector3(mov.y, -mov.z, -mov.x);
-            window.cam.position.addScaledVector(movSide.normalize(), -Math.exp(window.rocketPower));
+            window.keyControls.d = true;
         }
     }
 
