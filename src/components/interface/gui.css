@@ -1,9 +1,5 @@
 /* inspired by https://www.w3schools.com/howto/howto_js_treeview.asp */
 
-ul {
-    list-style-type: none;
-}
-
 #gui-pane {
     position: absolute;
     width: 13rem;
@@ -28,6 +24,10 @@ ul {
 #folder-display {
     padding: 0;
     margin: 0;
+}
+
+#folder-display ul {
+    list-style-type: none;
 }
 
 #folder-display li {
@@ -87,4 +87,32 @@ ul {
 
 #info-elem .au::after {
     content: "AU"
+}
+
+/* help tooltip */
+/* https://www.w3schools.com/howto/howto_css_tooltip.asp */
+.tooltip {
+    /* position: relative; */
+    display: inline-block;
+    border-bottom: 1px dotted;
+}
+
+.tooltip span {
+    visibility: hidden;
+    background-color: #404040;
+    color: #d0d0d0;
+    border-radius: 0.3rem;
+    width: 40rem;
+    position: absolute;
+    z-index: 2001;
+    top: 30vh;
+    left: 16rem;
+    padding-right: 2rem;
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.tooltip:hover span {
+    visibility: visible;
+    opacity: 1;
 }

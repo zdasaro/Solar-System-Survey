@@ -31,6 +31,23 @@ class GuiElem {
         this.folderDisplay = document.createElement("UL");
         this.folderDisplay.id = "folder-display";
         this.gui.appendChild(this.folderDisplay);
+
+        // help tooltip
+        this.help = document.createElement("DIV");
+        this.help.innerHTML="Help";
+        this.help.classList.add("tooltip");
+        const helptext = document.createElement("SPAN");
+        helptext.innerHTML = `
+        <ul>
+            <li>Scroll to zoom in and out.</li>
+            <li>Click and drag to rotate the view.</li>
+            <li>Use the arrow keys to pan the camera, and WASD to fly around, with a speed determined by the control Rocket Power.</li>
+            <li>Select an object on the left panel to highlight its orbital path in red. Then press the F key to focus on that object.</li>
+            <li>Press the I key to capture an image.</li>
+            <li>The control pane on the right allows you to adjust several simulation parameters.</li>
+        </ul>`;
+        this.help.appendChild(helptext);
+        this.gui.appendChild(this.help);
     }
 
     // layout of this.folders:
