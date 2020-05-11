@@ -433,6 +433,7 @@ class Bodies extends Object {
             // DWARF PLANETS
             {
                 "id": "1 Ceres",
+                "displayName": "Ceres",
                 "type": 2,
                 "parent": -1,
                 "parentMass": 1,
@@ -447,6 +448,7 @@ class Bodies extends Object {
             },
             {
                 "id": "136108 Haumea",
+                "displayName": "Haumea",
                 "type": 2,
                 "parent": -1,
                 "parentMass": 1,
@@ -461,6 +463,7 @@ class Bodies extends Object {
             },
             {
                 "id": "136199 Eris",
+                "displayName": "Eris",
                 "type": 2,
                 "parent": -1,
                 "parentMass": 1,
@@ -475,6 +478,7 @@ class Bodies extends Object {
             },
             {
                 "id": "13672 Makemake",
+                "displayName": "Makemake",
                 "type": 2,
                 "parent": -1,
                 "parentMass": 1,

@@ -7,10 +7,20 @@ class GuiElem {
         this.gui = document.createElement("DIV");
         this.gui.id = "gui-pane";
         
+        // container for the simulation date
         this.dateElem = document.createElement("DIV");
         this.gui.appendChild(this.dateElem);
+
+        // orbital info
         this.infoElem = document.createElement("DIV");
+        this.infoElem.id = "info-elem";
         this.gui.appendChild(this.infoElem);
+
+        // tree view of objects
+        let folderHeader = document.createElement("DIV");
+        folderHeader.classList.add("folder-header");
+        folderHeader.innerHTML = "Select an object:"
+        this.gui.appendChild(folderHeader);
         document.body.appendChild(this.gui);
         this.folders = [];
         this.folders[PLANET] = {displayName: "Planets", list: []};
@@ -75,8 +85,18 @@ class GuiElem {
         else {
             type = "Comet";
         }
-        this.infoElem.innerHTML = "<br>" + body.displayName + "<br>" + type + "<br>Radius: " + body.radius + " KM<br> Semi-Major Axis: " + 
-        body.a + " AU<br>Eccentricity: " + body.e + "<br>Inclination: " + body.i + " DEG<br>Long Asc Node: " + body.o + " DEG<br>Arg of Periapsis: " + body.w + "DEG";
+        // this.infoElem.innerHTML = "<br>" + body.displayName + "<br>" + type + "<br>Radius: " + body.radius + " KM<br> Semi-Major Axis: " + 
+        // body.a + " AU<br>Eccentricity: " + body.e + "<br>Inclination: " + body.i + " DEG<br>Long Asc Node: " + body.o + " DEG<br>Arg of Periapsis: " + body.w + "DEG";
+        this.infoElem.innerHTML = 
+        `<div class="type">${type} ${body.displayName}</div>
+        <div class="km">Radius: ${body.radius}</div>
+        <div class="au">Semi-Major Axis: ${body.a}</div>
+        <div>Eccentricity: ${body.e}</div>
+        <div class="deg">Inclination: ${body.i}</div>
+        <div class="deg">Long Asc Node: ${body.o}</div>
+        <div class="deg">Arg of Periapsis: ${body.w}</div>
+        <hr>
+        `;
     }
 
     date(month, day, year) {

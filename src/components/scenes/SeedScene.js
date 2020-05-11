@@ -105,14 +105,14 @@ class SeedScene extends Scene {
         document.body.appendChild(datGUIContainer);
         // Populate GUI
         this.state.ShowLabels = true;
-        this.state.gui.add(this.state, 'SimulationDayToSeconds', -100, 100);
-        this.state.gui.add(this.state, 'RocketPower', 1, 16);
+        this.state.gui.add(this.state, 'SimulationDayToSeconds', -100, 100).name("Simulation Days Per Second");
+        this.state.gui.add(this.state, 'RocketPower', 1, 16).name("Rocket Power");
         this.state.gui.add(this.state, 'Pause');
-        this.state.gui.add(this.state, 'ShowOrbitLines');
-        this.state.gui.add(this.state, "ShowLabels");
-        this.state.gui.add(this, 'SetYear');
-        this.state.gui.add(this, 'SetMonth', this.monthArray);
-        this.state.gui.add(this, 'SetDay');
+        this.state.gui.add(this.state, 'ShowOrbitLines').name("Show Orbit Lines");
+        this.state.gui.add(this.state, "ShowLabels").name("Show Labels");
+        this.state.gui.add(this, 'SetYear').name("Set Year");
+        this.state.gui.add(this, 'SetMonth', this.monthArray).name("Set Month");
+        this.state.gui.add(this, 'SetDay').name("Set Day");
     }
 
     addCamera(camera) {

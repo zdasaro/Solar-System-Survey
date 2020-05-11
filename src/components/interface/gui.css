@@ -6,7 +6,7 @@ ul {
 
 #gui-pane {
     position: absolute;
-    width: 15%;
+    width: 13rem;
     display: block;
     top: 0px;
     left: 0px;
@@ -15,6 +15,7 @@ ul {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     padding: 10px;
     z-index: 2000;
+    opacity: 0.8;
 }
 
 #datgui-pane {
@@ -26,6 +27,7 @@ ul {
 
 #folder-display {
     padding: 0;
+    margin: 0;
 }
 
 #folder-display li {
@@ -64,4 +66,25 @@ ul {
 
 .selected {
     font-weight: bold;
+}
+
+#info-elem {
+    font-size: smaller;
+}
+
+#info-elem .type {
+    font-size: medium;
+}
+
+/* Provide units to the info element*/
+#info-elem .km::after {
+    content: "KM";
+}
+
+#info-elem .deg::after {
+    content: "\00B0";
+}
+
+#info-elem .au::after {
+    content: "AU"
 }
