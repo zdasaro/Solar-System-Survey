@@ -7,6 +7,7 @@
  *
  */
 import { WebGLRenderer, PerspectiveCamera, Vector3, LoadingManager } from 'three';
+import { CSS2DRenderer } from 'three/examples/jsm/renderers/CSS2DRenderer.js'
 import { SeedScene } from 'scenes';
 import { CustomControl } from 'customcontrol';
 import { Interface } from 'interface';
@@ -29,6 +30,11 @@ loadingManager.onLoad = function() {
 };
 
 const renderer = new WebGLRenderer({ antialias: true, preserveDrawingBuffer: true, logarithmicDepthBuffer: true });
+const labelRenderer = new CSS2DRenderer();
+labelRenderer.domElement.style.position = 'absolute';
+labelRenderer.domElement.style.top = '0px';
+document.body.appendChild( labelRenderer.domElement );
+
 const controls = new CustomControl();
 window.selectId = "Sun";
 window.focusId = "Sun";
@@ -46,6 +52,7 @@ window.canvas.style.display = 'block'; // Removes padding below canvas
 // Render loop
 const onAnimationFrameHandler = (timeStamp) => {
     renderer.render(scene, window.cam);
+    labelRenderer.render(scene, window.cam);
     scene.update && scene.update(timeStamp);
     window.requestAnimationFrame(onAnimationFrameHandler);
 };
@@ -55,6 +62,7 @@ window.requestAnimationFrame(onAnimationFrameHandler);
 const windowResizeHandler = () => {
     const { innerHeight, innerWidth } = window;
     renderer.setSize(innerWidth, innerHeight);
+    labelRenderer.setSize(innerWidth, innerHeight);
     window.cam.aspect = innerWidth / innerHeight;
     window.cam.updateProjectionMatrix();
 };

@@ -18,6 +18,7 @@ class SeedScene extends Scene {
             SimulationDayToSeconds: 10,
             Pause: false,
             ShowOrbitLines: true,
+            ShowLabels: false,
             selectObject: "Sun",
             defaultUpdateList: [],
             defaultSleepList: [] // bodies not loaded
@@ -96,9 +97,11 @@ class SeedScene extends Scene {
         this.gui.generateFolders(this.BODIES, this.state);
         this.state.gui =  new Dat.GUI({width: 400}); // Create GUI for scene
         // Populate GUI
+        this.state.ShowLabels = true;
         this.state.gui.add(this.state, 'SimulationDayToSeconds', -100, 100);
         this.state.gui.add(this.state, 'Pause');
         this.state.gui.add(this.state, 'ShowOrbitLines');
+        this.state.gui.add(this.state, "ShowLabels");
         this.state.gui.add(this, 'SetYear');
         this.state.gui.add(this, 'SetMonth', this.monthArray);
         this.state.gui.add(this, 'SetDay');
@@ -157,7 +160,7 @@ class SeedScene extends Scene {
     }
 
     update(timeStamp) {
-        const { SimulationDayToSeconds, Pause, defaultUpdateList, defaultSleepList, ShowOrbitLines/*, selectObject*/ } = this.state;
+        const { SimulationDayToSeconds, Pause, defaultUpdateList, defaultSleepList, ShowOrbitLines, ShowLabels/*, selectObject*/ } = this.state;
         const selectObject = this.state.guiSelectObject;
         if (ShowOrbitLines && !this.prevOrbitLineToggle) {
             for (const obj of this.updateList) {
@@ -170,6 +173,17 @@ class SeedScene extends Scene {
             }
         }
         this.prevOrbitLineToggle = ShowOrbitLines;
+
+        if (ShowLabels) {
+            for (const obj of this.updateList) {
+                if (this.camera.position.length() > 50 * obj.a * obj.auToWorldUnits) {
+                    obj.toggleTextLabel(false);
+                }
+                else {
+                    obj.toggleTextLabel(true);
+                }
+            }
+        }
 
         // camera
         if (this.prevFocus != window.focusId) {
@@ -205,6 +219,7 @@ class SeedScene extends Scene {
                     // not a planet or moon, deload
                     if (b.type > 1) {
                         b.toggleOrbitPathLine(false);
+                        b.toggleTextLabel(false);
                         b.parentBody.remove(b);
                     }
                     else if (b.type == 1) { // deload all moons of the same planet
@@ -213,6 +228,7 @@ class SeedScene extends Scene {
                             const p = this.updateList[j];
                             if (parentid === p.parentid) {
                                 p.toggleOrbitPathLine(false);
+                                p.toggleTextLabel(false);
                                 p.parentBody.remove(p);
                             }
                         }
@@ -223,6 +239,7 @@ class SeedScene extends Scene {
                             const p = this.updateList[j];
                             if (parentid === p.parentid) {
                                 p.toggleOrbitPathLine(false);
+                                p.toggleTextLabel(false);
                                 b.remove(p);
                             }
                         }
@@ -250,6 +267,7 @@ class SeedScene extends Scene {
                                 p.update(this.simulationTime);
                                 newUpdateList.push(p);
                                 p.toggleOrbitPathLine(ShowOrbitLines);
+                                p.toggleTextLabel(ShowLabels);
                             }
                         }
                         found = true;
@@ -276,6 +294,7 @@ class SeedScene extends Scene {
                                         p.update(this.simulationTime);
                                         newUpdateList.push(p);
                                         p.toggleOrbitPathLine(ShowOrbitLines);
+                                        p.toggleTextLabel(ShowLabels);
                                         if (p.bodyid === b.bodyid) {
                                             p.selectThisObject(true);
                                         }
@@ -289,6 +308,7 @@ class SeedScene extends Scene {
                                 b.update(this.simulationTime);
                                 newUpdateList.push(b);
                                 b.toggleOrbitPathLine(ShowOrbitLines);
+                                b.toggleTextLabel(ShowLabels);
                                 b.selectThisObject(true);
                                 window.focusId = "Sun";
                                 this.camera.position.setLength(b.a * b.auToWorldUnits * 2);

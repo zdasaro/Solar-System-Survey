@@ -1,6 +1,7 @@
 import { Group, SphereGeometry, MeshBasicMaterial, Mesh, Vector3, Matrix3, LineBasicMaterial, BufferGeometry, Line, TextureLoader, NearestFilter, MeshPhongMaterial, Vector2, Color, PlaneGeometry, DoubleSide, RingGeometry, Geometry, Face3, RingBufferGeometry, Texture, MeshLambertMaterial } from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader.js';
+import { CSS2DObject } from 'three/examples/jsm/renderers/CSS2DRenderer.js'
 import {MTLLoader } from 'three/examples/jsm/loaders/MTLLoader';
 import earthTexture from '../../../img/earth/Earth.png';
 import earthNormal from '../../../img/earth/Earth-normal-8k.png';
@@ -412,9 +413,31 @@ class Body extends Group {
         this.orbitPathLine = new Line(orbitPathLineGeo, orbitPathLineMaterial);
         this.internalOrbitPathToggle = false;
 
+        // Text label
+        let textDiv = document.createElement('DIV');
+        textDiv.className = 'label';
+        textDiv.textContent = this.bodyid;
+        textDiv.style.marginTop = '-1em';
+        textDiv.style.color = "#d0d0d0";
+        textDiv.style.fontFamily = "Segoe UI,Tahoma,Geneva,Verdana,sans-serif";
+        this.textLabel = new CSS2DObject(textDiv);
+        this.textLabel.position.set(0, radius, 0);
+        this.internalTextToggle = false;
+
         this.parentBody = parent;
         this.parentid = parameters.parent;
         this.indexID = indexID;
+    }
+
+    toggleTextLabel(showTextLabels) {
+        if (showTextLabels && !this.internalTextToggle) {
+            this.add(this.textLabel);
+            this.internalTextToggle = true;
+        }
+        else if (!showTextLabels && this.internalTextToggle) {
+            this.remove(this.textLabel);
+            this.internalTextToggle = false;
+        }
     }
 
     toggleOrbitPathLine(showOrbitPathLines) {
