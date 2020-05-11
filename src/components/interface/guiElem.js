@@ -189,14 +189,14 @@ class GuiElem {
         if (body.list) {
             label.classList.add("collapsed");
             label.addEventListener("click", function() {
-                this.parentElement.querySelector('.hidden').classList.toggle("visible");
+                this.parentElement.querySelector('.tree-list').classList.toggle("visible");
                 this.classList.toggle("expanded");
 
             });
             label.classList.add("folder-title");
             // create nested list
             let ul = document.createElement("UL");
-            ul.classList.add("hidden");
+            ul.classList.add("tree-list");
             li.appendChild(ul);
             for (let child of body.list) {
                 this.addListItem(child, ul);
