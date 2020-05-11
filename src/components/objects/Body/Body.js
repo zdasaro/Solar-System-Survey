@@ -420,6 +420,7 @@ class Body extends Group {
         textDiv.style.marginTop = '-1em';
         textDiv.style.color = "#d0d0d0";
         textDiv.style.fontFamily = "Segoe UI,Tahoma,Geneva,Verdana,sans-serif";
+        textDiv.style.userSelect = "none";
         this.textLabel = new CSS2DObject(textDiv);
         this.textLabel.position.set(0, radius, 0);
         this.internalTextToggle = false;
