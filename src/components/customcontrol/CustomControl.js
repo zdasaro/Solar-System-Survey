@@ -44,6 +44,10 @@ class CustomControl extends Object {
     // Code based off of: https://andreasrohner.at/posts/Web%20Development/JavaScript/Simple-orbital-camera-controls-for-THREE-js/
     handleDrag(event) {
         if (event.which == 1) {
+            let worldPos = new Vector3();
+            window.focusObj.getWorldPosition(worldPos); // Note can be unstable when focused on an object orbiting another orbiting object (moons)
+            window.cam.lookAt(worldPos);
+
             let deltaX = event.movementX;
             let deltaY = event.movementY;
 
@@ -64,15 +68,20 @@ class CustomControl extends Object {
             pos.x = radius * Math.sin(theta) * Math.sin(phi);
             pos.y = radius * Math.cos(theta);
 
-            let worldPos = new Vector3();
+            
             window.focusObj.getWorldPosition(worldPos); // Note can be unstable when focused on an object orbiting another orbiting object (moons)
             window.cam.lookAt(worldPos);
         }
     }
 
     handleZoom(event) {
+        let worldPos = new Vector3();
+        window.focusObj.getWorldPosition(worldPos); // Note can be unstable when focused on an object orbiting another orbiting object (moons)
+        window.cam.lookAt(worldPos);
         let delta = event.deltaY;
         if (Math.abs(delta) < 2) {
+            window.focusObj.getWorldPosition(worldPos); // Note can be unstable when focused on an object orbiting another orbiting object (moons)
+            window.cam.lookAt(worldPos);
             return;
         }
         if (delta < 0) {
@@ -82,7 +91,6 @@ class CustomControl extends Object {
             window.cam.position.multiplyScalar(1.1);
         }
         window.cam.position.clampLength(window.focusObj.minZoom, window.focusObj.maxZoom);
-        let worldPos = new Vector3();
         window.focusObj.getWorldPosition(worldPos); // Note can be unstable when focused on an object orbiting another orbiting object (moons)
         window.cam.lookAt(worldPos);
     }
