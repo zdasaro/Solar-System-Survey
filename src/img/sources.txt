@@ -1,4 +1,3 @@
-most planets and moons: http://www.celestiamotherlode.net/
 4k_venus_atmosphere.jpg: https://www.solarsystemscope.com/textures/
 8k_saturn.jpg https://www.solarsystemscope.com/textures/
 Phobos, Deimos, Haumea: https://solarsystem.nasa.gov/resources
@@ -10,4 +9,4 @@ Titania: http://celestia.simulatorlabbs.com/CelSL/textures/medres/
 Starfield: https://svs.gsfc.nasa.gov/3572
 Comet Halley, Asteroid Pallas, Hygiea: https://3d-asteroids.space/
 Comet Hartley (model used for comet Borelly): https://3d-asteroids.space/comets/103P-Hartley-2
-
+all remaining textures: http://www.celestiamotherlode.net/
