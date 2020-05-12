@@ -1,6 +1,6 @@
 # COS 426 Final Project: Solar-System-Survey
 
-This project was made as part of a final assignment in COS 426: Computer Graphics at Princeton University by Zak Dasaro and Jason Kim in Spring 2020.
+This project was made as part of a final assignment in COS 426: Computer Graphics at Princeton University by [Zak Dasaro](https://github.com/zdasaro) and [Jason Kim](https://github.com/jkim117) in Spring 2020.
 
 [Online Demo](https://zdasaro.github.io/Solar-System-Survey/)
 
@@ -44,6 +44,8 @@ Sources of textures and 3D models (as explained in sources.txt):
 * https://svs.gsfc.nasa.gov/3572
 * https://3d-asteroids.space/
 * https://in-the-sky.org/solarsystem.php
+
+Starter code: https://github.com/ReillyBova/three-seed
 
 ## License
 [MIT](./LICENSE)
