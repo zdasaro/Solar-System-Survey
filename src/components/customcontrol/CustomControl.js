@@ -1,17 +1,19 @@
 import { Vector3 } from 'three';
 
 class CustomControl extends Object {
-    constructor() {
+    constructor(idsToIgnore) {
         // Call parent camera constructor
         super();
-        window.addEventListener("mousemove", this.handleDrag);
-        window.addEventListener("wheel", this.handleZoom);
-        window.addEventListener("keydown", this.handleKey);
-        window.addEventListener("keyup", this.handleKeyUp);
+        window.addEventListener("mousemove", this.handleDrag.bind(this));
+        window.addEventListener("wheel", this.handleZoom.bind(this));
+        window.addEventListener("keydown", this.handleKey.bind(this));
+        window.addEventListener("keyup", this.handleKeyUp.bind(this));
+        this.idsToIgnore = idsToIgnore;
     }
 
     // Handle key release
     handleKeyUp(event) {
+        if (this.targetedAnIgnoredElement(event.target)) return;
         if (event.key === "ArrowUp") {
             window.keyControls.up = false;
         }
@@ -46,6 +48,7 @@ class CustomControl extends Object {
 
     // Handle key presses
     handleKey(event) {
+        if (this.targetedAnIgnoredElement(event.target)) return;
         // focus on the selected object
         if (event.key === "f") {
             if (window.focusId === window.selectId) {
@@ -113,7 +116,7 @@ class CustomControl extends Object {
 
     // Code based off of: https://andreasrohner.at/posts/Web%20Development/JavaScript/Simple-orbital-camera-controls-for-THREE-js/
     handleDrag(event) {
-        if (event.which == 1) {
+        if (event.which == 1 && !this.targetedAnIgnoredElement(event.target)) {
             let worldPos = new Vector3();
             window.focusObj.getWorldPosition(worldPos); // Note can be unstable when focused on an object orbiting another orbiting object (moons)
             window.cam.lookAt(worldPos);
@@ -145,6 +148,7 @@ class CustomControl extends Object {
     }
 
     handleZoom(event) {
+        if (this.targetedAnIgnoredElement(event.target)) return;
         let worldPos = new Vector3();
         window.focusObj.getWorldPosition(worldPos); // Note can be unstable when focused on an object orbiting another orbiting object (moons)
         window.cam.lookAt(worldPos);
@@ -163,6 +167,13 @@ class CustomControl extends Object {
         window.cam.position.clampLength(window.focusObj.minZoom, window.focusObj.maxZoom);
         window.focusObj.getWorldPosition(worldPos); // Note can be unstable when focused on an object orbiting another orbiting object (moons)
         window.cam.lookAt(worldPos);
+    }
+
+    targetedAnIgnoredElement(target) {
+        for (let id of this.idsToIgnore) {
+            if (document.getElementById(id).contains(target)) return true;
+        }
+        return false;
     }
 }
 

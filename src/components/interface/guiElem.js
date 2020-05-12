@@ -131,7 +131,7 @@ class GuiElem {
         this.state = state;
         for (let i = 0; i < bodyList.length; i++) {
             const body = bodyList[i];
-            const displayName = body.displayName ? body.displayName : this.capitalize(body.id);
+            const displayName = body.displayName;
             if (body.type === PLANET) {
                 this.folders[MOON].list.push({
                     id: body.id,
@@ -239,10 +239,6 @@ class GuiElem {
             this.select(body)
         }
     }
-
-    capitalize(name) {
-        return name.substring(0,1).toUpperCase()+name.substring(1);
-    }
 }
 
-export default GuiElem
+export default GuiElem;

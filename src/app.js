@@ -35,7 +35,7 @@ labelRenderer.domElement.style.position = 'absolute';
 labelRenderer.domElement.style.top = '0px';
 document.body.appendChild( labelRenderer.domElement );
 
-const controls = new CustomControl();
+const controls = new CustomControl(['datgui-pane', 'gui-pane']);
 window.selectId = "Sun";
 window.focusId = "Sun";
 window.keyControls = {

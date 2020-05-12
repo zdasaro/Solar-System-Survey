@@ -344,6 +344,7 @@ class Body extends Group {
         this.w = degToRad(parameters.w); // argument of perihelion
         this.m = degToRad(parameters.m); // mean anomaly at J2000
         this.bodyid = parameters.id; // body name
+        this.displayName = parameters.displayName;
 
         this.minZoom = radius * 1.0;
         this.maxZoom = 70000000;
@@ -417,7 +418,7 @@ class Body extends Group {
         // Text label
         let textDiv = document.createElement('DIV');
         textDiv.className = 'label';
-        textDiv.textContent = this.bodyid;
+        textDiv.textContent = this.displayName;
         textDiv.style.marginTop = '-1em';
         textDiv.style.color = "#d0d0d0";
         textDiv.style.fontFamily = "Segoe UI,Tahoma,Geneva,Verdana,sans-serif";

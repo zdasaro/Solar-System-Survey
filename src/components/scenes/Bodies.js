@@ -578,6 +578,12 @@ class Bodies extends Object {
                 "m": 137.9304
             },
         ];
+
+        for (let body of this.bodyList) {
+            if (!body.displayName) {
+                body.displayName = body.id.substring(0,1).toUpperCase()+body.id.substring(1)
+            }
+        }
     }
 }
 export default Bodies;
