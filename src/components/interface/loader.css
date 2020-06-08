@@ -15,6 +15,7 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
+    margin: auto;
 }
 
 .loader .face {
@@ -70,6 +71,13 @@ body {
                 0 0 8em,
                 0 0 10em,
                 0 0 0 0.5em rgba(255, 255, 0, 0.1);
+}
+
+#loading-screen h2 {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    width: 20em;
+    text-align: center;
+    color: #d0d0d0;
 }
 
 @keyframes animate {

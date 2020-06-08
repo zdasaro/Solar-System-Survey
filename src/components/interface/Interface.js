@@ -12,6 +12,10 @@ class Interface {
         this.loader.className = "loader";
         this.loadingscreen.appendChild(this.loader);
 
+        this.message = document.createElement("H2");
+        this.message.innerText = "loading may take a few minutes...";
+        this.loadingscreen.appendChild(this.message);
+
         this.face = document.createElement("DIV");
         this.face.className = "face";
         this.loader.appendChild(this.face);
